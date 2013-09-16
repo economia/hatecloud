@@ -32,9 +32,8 @@ describe 'Shouts' ->
                 (err, results) <~ async.map data, (dato, cb) ->
                     shouts.save ip, ...dato, cb
                 expect err .to.be null
-                expect results.0 .to.equal \pending
-                expect results.1 .to.equal \pending
-                expect results.2 .to.equal \pending
+                expect results .to.have.length data.length
+                results.forEach -> expect it .to.equal \pending
                 done!
             test 'should return "non-existing-party" when trying to shout to a non-existing party' (done) ->
                 (err, result) <~ shouts.save ip, \termA \agaga
