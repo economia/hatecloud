@@ -44,8 +44,9 @@ describe 'Shouts' ->
 
         describe 'Approve' ->
             test 'should approve selected terms' (done) ->
-                (err, results) <~ async.map <[termA termB termD termE]>, shouts~approve
+                (err, results) <~ async.map <[termA termA termB termD termE]>, shouts~approve
                 expect err .to.be null
+                results.forEach -> expect it .to.be.greaterThan 0
                 done!
         describe 'Create after Approval' ->
             test 'should return "ok" return code' ->
