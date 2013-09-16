@@ -92,10 +92,10 @@ describe 'Shouts' ->
 
     describe 'Antispam' ->
         test 'Shout should be querying Antispam for permission to vote' ->
-            expect antispamMock.requests .to.have.length 4
+            expect antispamMock.requests .to.have.length 5
             expect antispamMock.requests.0.ip .to.equal ip
 
-        test 'shout should not insert terms if antispam is blocking it' ->
+        test 'shout should not insert terms if antispam is blocking it' (done) ->
             antispamResult := no
             (err, result) <~ shouts.save ip, \termA \cssd
             expect err .to.be null
