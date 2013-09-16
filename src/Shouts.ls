@@ -6,9 +6,26 @@ module.exports = class Shouts
     pendingDelimiter: ";"
     (@redisClient, @antispam, @parties) ->
 
-    getAll: ->
+    getAll: (cb) ->
+        @getFromStore @getStoreAll!, cb
 
-    get: (partyId) ->
+    get: (partyId, cb) ->
+        store = @getStoreParty partyId
+        @getFromStore store, cb
+
+    getFromStore: (store, cb) ->
+        (err, results) <~ @redisClient.zrevrangebyscore do
+            store
+            +Infinity
+            0
+            \WITHSCORES
+        return cb err if err
+        formatted = for i in [0 til results.length by 2]
+            term = results[i]
+            score = parseInt results[i + 1], 10
+            {term, score}
+
+        cb null formatted
 
     save: (ip, ...terms, partyId, cb) ->
         existingParty = partyId in @parties
@@ -58,15 +75,17 @@ module.exports = class Shouts
             @getStorePending!
             0
             +Infinity
-            'WITHSCORES'
+            \WITHSCORES
         return cb err if err
-        termsFound = 0
-        for i in [0 til allUnapproved.length by 2]
+        tasks = []
+        for let i in [0 til allUnapproved.length by 2]
             [term, partyId] = allUnapproved[i].split @pendingDelimiter
-            continue if term isnt approvedTerm
+            return if term isnt approvedTerm
             score = parseInt allUnapproved[i + 1], 10
-            @saveApproved term, partyId, score
-            @redisClient.zrem @getStorePending!, allUnapproved[i]
-            ++termsFound
+            tasks.push ~> @saveApproved term, partyId, score, it
+            tasks.push ~> @redisClient.zrem @getStorePending!, allUnapproved[i], it
+        (err) <~ async.parallel tasks
+        return cb err if err
+        cb null tasks.length / 2
 
-        cb null termsFound
+
