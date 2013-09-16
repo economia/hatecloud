@@ -66,8 +66,9 @@ test-script = (file) ->
     fileAddress .= join '/'
     (err, stdout, stderr) <~ exec "lsc -o #__dirname/lib -c #__dirname/src"
     throw stderr if stderr
-    (err, stdout, stderr) <~ exec "mocha --compilers ls:livescript -R tap --bail #__dirname/test/#fileAddress"
-    niceTestOutput stdout, stderr
+    cmd = "mocha --compilers ls:livescript -R tap --bail #__dirname/test/#fileAddress"
+    (err, stdout, stderr) <~ exec cmd
+    niceTestOutput stdout, stderr, cmd
 
 relativizeFilename = (file) ->
     file .= replace __dirname, ''
@@ -98,7 +99,7 @@ task \build-script ({currentfile}) ->
         <~ build-script file
         combine-scripts compression: no
 
-niceTestOutput = (test, stderr) ->
+niceTestOutput = (test, stderr, cmd) ->
     lines         = test.split "\n"
     oks           = 0
     fails         = 0
@@ -127,3 +128,4 @@ niceTestOutput = (test, stderr) ->
             console.log "Tests did not run (error in testfile?)"
             console.log test
             console.log stderr
+            console.log cmd
