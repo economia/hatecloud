@@ -16,7 +16,7 @@ describe 'Shouts' ->
     antispamMock =
         requests: []
         exec: (ip, partyId, cb) ->
-            requests.push {ip, partyId}
+            @requests.push {ip, partyId}
             cb null antispamResult
     shouts = new Shouts redisClient, antispamMock, <[ods cssd top]>
     data = [
