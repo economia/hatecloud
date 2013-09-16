@@ -3,15 +3,16 @@ require! {
     '../src/Antispam'
     async
     redis
+    './config'
 }
-redisClient = redis.createClient 6379 '192.168.123.16'
+redisClient = redis.createClient config.redis.port, config.redis.address
 test = it
 describe 'Antispam' ->
     antispam = new Antispam redisClient, timeout: 1
     ip = '127.0.0.1'
     checkFromIp = (party, cb) -> antispam.exec ip, party, cb
     before (done) ->
-        <~ redisClient.select 1
+        <~ redisClient.select config.redis.db
         <~ redisClient.flushdb!
         done!
     after (done) ->
