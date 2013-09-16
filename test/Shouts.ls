@@ -12,6 +12,9 @@ describe 'Shouts' ->
         <~ redisClient.select config.redis.db
         <~ redisClient.flushdb!
         done!
+    after (done) ->
+        <~ redisClient.flushdb!
+        done!
     antispamResult = yes
     antispamMock =
         requests: []
