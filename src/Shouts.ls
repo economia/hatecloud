@@ -53,5 +53,24 @@ module.exports = class Shouts
         | null => cb null no
         | _    => cb null yes
 
-    approve: (term, cb) ->
+    approve: (approvedTerm, cb) ->
+        storePending = @getStorePending!
+        (err, allUnapproved) <~ @redisClient.zrangebyscore do
+            storePending
+            0
+            +Infinity
+            'WITHSCORES'
+        return cb err if err
+        termsFound = 0
+        storeAll = @getStoreAll!
+        for i in [0 til allUnapproved.length by 2]
+            [term, partyId] = allUnapproved[i].split @pendingDelimiter
+            continue if term isnt approvedTerm
+            score = parseInt allUnapproved[i + 1], 10
+            storeParty = @getStoreParty partyId
+            @redisClient.zincrby storeAll, score, term
+            @redisClient.zincrby storeParty, score, term
+            @redisClient.zrem storePending, allUnapproved[i]
+            ++termsFound
 
+        cb null termsFound
