@@ -115,8 +115,8 @@ niceTestOutput = (test, stderr, cmd) ->
             shortOut.push line.match(/not ok [0-9]+ (.*)$/)[1]
         else if 'Disabled' == line.substr 0 8
             disabledTests.push line
-        else if line and ('#' != line.substr 0, 1) and ('1..' != line.substr 0, 3) and ('   ' != line.substr 0, 3)
-            console.log line
+        else if line and ('#' != line.substr 0, 1) and ('1..' != line.substr 0, 3)
+            console.log line# if ('   ' != line.substr 0, 3)
     if oks && !fails
         console.log "Tests OK (#{oks})"
         disabledTests.forEach -> console.log it
