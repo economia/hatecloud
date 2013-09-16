@@ -41,13 +41,19 @@ describe 'Shouts' ->
                 expect result .to.equal \non-existing-party
                 done!
 
-
         describe 'Approve' ->
+            approvalResults = null
             test 'should approve selected terms' (done) ->
-                (err, results) <~ async.map <[termA termA termB termD termE]>, shouts~approve
+                (err, results) <~ async.mapSeries <[termA termA termB termD termE]>, shouts~approve
                 expect err .to.be null
-                results.forEach -> expect it .to.be.greaterThan 0
+                approvalResults := results
                 done!
+            test 'should not approve any records in the repeated termA approval' ->
+                expect approvalResults.1 .to.equal 0
+            test 'should approve some terms in all other cases' ->
+                approvalResults.forEach (result, index) ->
+                    expect result .to.be.greaterThan 0 if index != 1
+
         describe 'Create after Approval' ->
             test 'should return "ok" return code' ->
                 (err, result) <~ shouts.save ip, \termA \top
@@ -68,7 +74,7 @@ describe 'Shouts' ->
                 expect terms .to.not.contain \termC
 
             test 'retrieved terms should have correct scores' ->
-                expect allTerms.0.score .to.equal 4
+                expect allTerms.0.score .to.equal 3
                 expect allTerms.1.score .to.equal 2
 
         describe 'Retrieve - by party' ->
