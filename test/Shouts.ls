@@ -64,11 +64,12 @@ describe 'Shouts' ->
                 done!
 
             test 'not approved terms should not be retrieved' ->
-                expect \termC .to.not.be.in allTerms.map (.term)
+                terms = allTerms.map (.term)
+                expect terms .to.not.contain \termC
 
             test 'retrieved terms should have correct scores' ->
-                expect results.0.score .to.equal 4
-                expect results.1.score .to.equal 2
+                expect allTerms.0.score .to.equal 4
+                expect allTerms.1.score .to.equal 2
 
         describe 'Retrieve - by party' ->
             partyTerms = null
