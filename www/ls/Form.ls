@@ -37,5 +37,9 @@ window.Form = class Form implements jQuery.eventEmitter
     clear: ->
         for $input in @$inputs then $input.val ""
 
-    submit: ->
-        console.log 'submitted'
+    submit: (evt) ->
+        evt.preventDefault!
+        values = for $input in @$inputs
+            $input.val!
+        @emit \submit values
+        @hide!

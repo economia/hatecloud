@@ -38,6 +38,10 @@ window.Control = class Control
             ..addClass \form
             ..appendTo @$container
         @formFactory @$form
+            ..on \submit @~onNewTerms
+
+    onNewTerms: (evt, ...terms) ->
+
 
     onTermClicked: (term) ->
         return if @curentPartyId is \all
