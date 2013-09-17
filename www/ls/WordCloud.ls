@@ -1,5 +1,7 @@
 window.WordCloud = class WordCloud
     (@$container) ->
+        @width = @$container.width!
+        @height = @$container.height!
 
     draw: (words) ->
         | Modernizr.svg => @drawSVG words
@@ -33,8 +35,8 @@ window.WordCloud = class WordCloud
                 >#{it.text}</text>"""
 
         "
-        <svg width='650' height='650' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-        <g transform='translate(325,325)'>
+        <svg width='#{@width}' height='#{@height}' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+        <g transform='translate(#{@width / 2},#{@height / 2})'>
             #{texts.join ''}
         </g>
         </svg>"
@@ -51,7 +53,7 @@ window.WordCloud = class WordCloud
                 data-y='#{it.y}'
                 >#{it.text}</span>"""
 
-        "<div style='position: absolute; top: 325px;left: 325px'>
+        "<div style='position: absolute; top: #{@width / 2}px;left: #{@height / 2}px'>
             #{texts.join ''}
         </div>"
 
