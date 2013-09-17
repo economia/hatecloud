@@ -9,6 +9,7 @@ window.Control = class Control
         @$selector = $ "<ul></ul>"
             ..addClass \selector
         for strana of @data
+            continue if strana is \all
             $ "<li></li>"
                 ..html strana
                 ..appendTo @$selector
