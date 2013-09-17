@@ -1,3 +1,6 @@
-wordCloud = new WordCloud $ '.cloud'
 (data) <~ $.getJSON "./temp/all.json"
-wordCloud.draw data.all
+control = new Control do
+    data
+    $ '#content'
+    -> new WordCloud ...
+# wordCloud.draw data.all
