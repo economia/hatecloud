@@ -40,6 +40,7 @@ window.Control = class Control
         @formFactory @$form
 
     onTermClicked: (term) ->
+        return if @curentPartyId is \all
         @form.addTerm term
 
     registerClickHandlers: ->
