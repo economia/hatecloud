@@ -1,6 +1,9 @@
 window.Control = class Control
     (@data, @$container, @wordCloudFactory) ->
         @drawSelector!
+        @wordCloud = @prepareWordCloud!
+            ..draw @data.all
+
 
     drawSelector: ->
         @$selector = $ "<ul></ul>"
@@ -11,3 +14,8 @@ window.Control = class Control
                 ..appendTo @$selector
         @$selector.appendTo @$container
 
+    prepareWordCloud: ->
+        $wordCloud = $ "<div></div>"
+            ..addClass \wordCloud
+            ..appendTo @$container
+        @wordCloudFactory $wordCloud
