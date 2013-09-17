@@ -71,3 +71,17 @@ body
             &.kdu text
                 color PartyKDU
                 fill PartyKDU
+        .form
+            position absolute
+            top 40px
+            left 0px
+            width @width
+            height 50px
+            overflow hidden
+            form
+                position absolute
+                width 100%
+                left 130%
+                transition left 0.8s
+                &.displayed
+                    left 0%

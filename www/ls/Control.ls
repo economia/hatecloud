@@ -1,8 +1,10 @@
 window.Control = class Control
-    (@data, @$container, @wordCloudFactory) ->
+    (@data, @$container, @wordCloudFactory, @formFactory) ->
         @drawSelector!
         @wordCloud = @prepareWordCloud!
+        @form = @prepareForm!
         @drawParty \all
+        @registerClickHandlers!
 
     drawSelector: ->
         @$selector = $ "<ul></ul>"
@@ -30,3 +32,19 @@ window.Control = class Control
             ..addClass \wordCloud
             ..appendTo @$container
         @wordCloudFactory @$wordCloud
+
+    prepareForm: ->
+        @$form = $ "<div></div>"
+            ..addClass \form
+            ..appendTo @$container
+        @formFactory @$form
+
+    onTermClicked: (term) ->
+        @form.addTerm term
+
+    registerClickHandlers: ->
+        $ document .on \click '.wordCloud text' (evt) ~>
+            @onTermClicked evt.currentTarget.textContent
+        $ document .on \click '.wordCloud span' (evt) ~>
+            @onTermClicked evt.currentTarget.innerHTML
+
