@@ -4,16 +4,20 @@ window.Control = class Control
         @wordCloud = @prepareWordCloud!
             ..draw @data.all
 
-
     drawSelector: ->
         @$selector = $ "<ul></ul>"
             ..addClass \selector
-        for strana of @data
-            continue if strana is \all
-            $ "<li></li>"
-                ..html strana
-                ..appendTo @$selector
+        for _party of @data
+            continue if _party is \all
+            let party = _party
+                $ "<li></li>"
+                    ..html party
+                    ..appendTo @$selector
+                    ..on \click ~> @drawParty party
         @$selector.appendTo @$container
+
+    drawParty: (partyId) ->
+        @wordCloud.draw @data[partyId]
 
     prepareWordCloud: ->
         $wordCloud = $ "<div></div>"
