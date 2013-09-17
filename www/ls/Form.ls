@@ -3,13 +3,19 @@ window.Form = class Form implements jQuery.eventEmitter
         @createDom!
         @displayed = no
 
-    addTerm: ->
+    addTerm: (term) ->
         @display! unless @displayed
-
+        maxIndex = @$inputs.length - 1
+        for index, $input of @$inputs
+            index = parseInt index, 10
+            if $input.val! in ['', term] or index == maxIndex
+                $input.val term
+                break
+        @$element
 
     createDom: ->
         @$element = $ "<form></form>"
-        for i in [1 to 3]
+        @$inputs = for i in [1 to 3]
             $input = $ "<input type='text' />"
                 ..appendTo @$element
         $submit = $ "<input type='submit' value='Odeslat' />"
@@ -29,7 +35,7 @@ window.Form = class Form implements jQuery.eventEmitter
         @clear!
 
     clear: ->
-        @$element.find 'input[type=text]' .val ""
+        for $input in @$inputs then $input.val ""
 
     submit: ->
         console.log 'submitted'
