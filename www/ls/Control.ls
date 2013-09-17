@@ -20,10 +20,10 @@ window.Control = class Control
         @$selector.appendTo @$container
 
     drawParty: (partyId) ->
-        @$wordCloud.removeClass @lastPartyId if @lastPartyId
+        @$wordCloud.removeClass @curentPartyId if @curentPartyId
         @$wordCloud.addClass partyId
         @wordCloud.draw @data[partyId]
-        @lastPartyId = partyId
+        @curentPartyId = partyId
 
     prepareWordCloud: ->
         @$wordCloud = $ "<div></div>"
