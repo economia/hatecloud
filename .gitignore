@@ -1,3 +1,6 @@
 /node_modules
 /lib
+/www/screen.css
+/www/js/*
+/www/script.js
 /*.sublime-workspace

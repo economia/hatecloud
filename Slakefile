@@ -3,7 +3,7 @@ require! fs
 option 'testFile' 'File in (/lib or /test) to run test on' 'FILE'
 option 'currentfile' 'Latest file that triggered the save' 'FILE'
 
-deferScripts = []
+deferScripts = [ 'base.js' ]
 
 build-styles = (options = {}) ->
     require! stylus
