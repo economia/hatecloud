@@ -2,7 +2,25 @@ window.WordCloud = class WordCloud
     (@$container) ->
 
     draw: (words) ->
+        | Modernizr.svg => @drawSVG words
+        | otherwise     => @drawHTML words
+
+    drawSVG: (words) ->
         @$container.html @getSVG words
+
+    drawHTML: (words) ->
+        @$container.html @getHTML words
+        @$container.find 'span' .each ->
+            $ele = $ @
+            width = $ele.width!
+            height = $ele.height!
+            x = +$ele.data 'x'
+            y = +$ele.data 'y'
+            if $ele.hasClass \rot
+                width *= 0.8
+            $ele.css \left x - width / 2
+            $ele.css \top y - height / 2
+
 
     getSVG: (words) ->
         texts = for it in words
@@ -20,4 +38,20 @@ window.WordCloud = class WordCloud
             #{texts.join ''}
         </g>
         </svg>"
+
+    getHTML: (words) ->
+        texts = for it in words
+            """<span style='font-size:#{it.size}px;
+                font-family:Impact;
+                position:absolute;
+                left: #{it.x}px;
+                top: #{it.y}px;'
+                class='#{it.className || ''} #{if it.rotate then 'rot' else ''}'
+                data-x='#{it.x}'
+                data-y='#{it.y}'
+                >#{it.text}</span>"""
+
+        "<div style='position: absolute; top: 325px;left: 325px'>
+            #{texts.join ''}
+        </div>"
 
