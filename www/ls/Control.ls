@@ -10,10 +10,13 @@ window.Control = class Control
         for _party of @data
             continue if _party is \all
             let party = _party
-                $ "<li></li>"
+                item = $ "<li></li>"
                     ..html party
                     ..appendTo @$selector
-                    ..on \click ~> @drawParty party
+                    ..on \click ~>
+                        @$selector.find '.active' .removeClass \active
+                        item.addClass \active
+                        @drawParty party
         @$selector.appendTo @$container
 
     drawParty: (partyId) ->
