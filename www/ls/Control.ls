@@ -2,7 +2,7 @@ window.Control = class Control
     (@data, @$container, @wordCloudFactory) ->
         @drawSelector!
         @wordCloud = @prepareWordCloud!
-            ..draw @data.all
+        @drawParty \all
 
     drawSelector: ->
         @$selector = $ "<ul></ul>"
@@ -17,10 +17,13 @@ window.Control = class Control
         @$selector.appendTo @$container
 
     drawParty: (partyId) ->
+        @$wordCloud.removeClass @lastPartyId if @lastPartyId
+        @$wordCloud.addClass partyId
         @wordCloud.draw @data[partyId]
+        @lastPartyId = partyId
 
     prepareWordCloud: ->
-        $wordCloud = $ "<div></div>"
+        @$wordCloud = $ "<div></div>"
             ..addClass \wordCloud
             ..appendTo @$container
-        @wordCloudFactory $wordCloud
+        @wordCloudFactory @$wordCloud
