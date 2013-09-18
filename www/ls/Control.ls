@@ -22,6 +22,7 @@ window.Control = class Control
         @$selector.appendTo @$container
 
     drawParty: (partyId) ->
+        return if partyId is @curentPartyId
         @form.hide!
         @$wordCloud.removeClass @curentPartyId if @curentPartyId
         @$wordCloud.addClass partyId
