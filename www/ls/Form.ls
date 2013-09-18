@@ -13,17 +13,6 @@ window.Form = class Form implements jQuery.eventEmitter
                 break
         @$element
 
-    createDom: ->
-        @$element = $ "<form></form>"
-        @$inputs = for i in [1 to 3]
-            $input = $ "<input type='text' />"
-                ..appendTo @$element
-        $submit = $ "<input type='submit' value='Odeslat' />"
-            ..appendTo @$element
-            ..on \click @~submit
-
-        @$element.appendTo @$container
-
     display: ->
         @$element.addClass \displayed
         @displayed = yes
@@ -43,3 +32,14 @@ window.Form = class Form implements jQuery.eventEmitter
             $input.val!
         @emit \submit values
         @hide!
+
+    createDom: ->
+        @$element = $ "<form></form>"
+        @$inputs = for i in [1 to 3]
+            $input = $ "<input type='text' />"
+                ..appendTo @$element
+        $submit = $ "<input type='submit' value='Odeslat' />"
+            ..appendTo @$element
+            ..on \click @~submit
+
+        @$element.appendTo @$container
