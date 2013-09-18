@@ -9,6 +9,19 @@ module.exports = class Shouts
     getAll: (cb) ->
         @getFromStore @getStoreAll!, cb
 
+    getAllByParty: (cb) ->
+        (err, termsByParties) <~ async.map @parties, (partyId, cb) ~>
+            (err, terms) <~ @get partyId
+            return cb err if err
+            terms.forEach -> it.party = partyId
+            cb null terms
+        return cb err if err
+        output = [].concat ...termsByParties
+        output .= sort (a, b) -> b.score - a.score
+        cb null output
+
+
+
     get: (partyId, cb) ->
         store = @getStoreParty partyId
         @getFromStore store, cb

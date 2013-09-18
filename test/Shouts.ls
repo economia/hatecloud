@@ -92,6 +92,15 @@ describe 'Shouts' ->
                 expect results.1.term .to.equal \termA
                 expect results.1.score .to.equal 1
                 done!
+        describe 'Retrieve - all words with party information' (done) ->
+            test 'should retrieve in proper format' (done) ->
+                (err, results) <~ shouts.getAllByParty!
+                expect err .to.be null
+                expect results .to.be.an \array
+                expect results .to.have.length 6
+                expect results[0].term .to.equal \termB
+                expect results[0].party .to.equal \ods
+                done!
 
     describe 'Antispam' ->
         test 'Shout should be querying Antispam for permission to vote' ->
