@@ -26,6 +26,9 @@ window.Control = class Control
         @form.hide!
         @$wordCloud.removeClass @curentPartyId if @curentPartyId
         @$wordCloud.addClass partyId
+        switch @voteWatch.didVote partyId
+        | yes => @$wordCloud.addClass \voted
+        | no  => @$wordCloud.removeClass \voted
         @wordCloud.draw @data[partyId]
         @curentPartyId = partyId
 
@@ -54,7 +57,9 @@ window.Control = class Control
 
     onTermClicked: (term) ->
         return if @curentPartyId is \all
-        @form.addTerm term
+        switch @voteWatch.didVote @curentPartyId
+        | yes => alertify.error "Pro tuto stranu jste již volil"
+        | no  => @form.addTerm term
 
     registerClickHandlers: ->
         $ document .on \click '.wordCloud text' (evt) ~>
