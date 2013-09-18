@@ -60,7 +60,7 @@ window.Control = class Control
                 | _   => alertify.error "Omlouváme se, ale v aplikaci nastala chyba. Zkuste to prosím později."
             request.done ->
                 alertify.success "Děkujeme, vaše hlasování proběhlo v pořádku"
-            # @voteWatch.registerVote party
+                @voteWatch.registerVote party
 
 
     onTermClicked: (term) ->
