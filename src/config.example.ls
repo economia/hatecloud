@@ -9,3 +9,5 @@ module.exports =
     wordCloud:
         width: 650_px
         height: 650_px
+        maxSize: 90_px
+        minSize: 5_px
