@@ -51,8 +51,8 @@ handleRequest = (req, res) ->
             validData &&= data?party
             terms = data.["terms[]"]
             party = data.party
-            validData = typeof! terms == \String
-            validData = typeof! party == \Array
+            validData = typeof! party == \String
+            validData = typeof! terms == \Array
             unless  validData
                 res.statusCode = 500
                 res.end!
