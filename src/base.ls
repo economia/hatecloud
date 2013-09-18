@@ -2,6 +2,7 @@ require! {
     StaticServer : 'node-static'.Server
     http
     redis
+    querystring
     './Shouts'
     './Antispam'
     './WordCloud'
@@ -29,7 +30,8 @@ server = http.createServer (req, res) ->
 server.listen 80
 
 handleRequest = (req, res) ->
-    if req.method == \GET
+    switch req.method
+    | \GET
         (err, data) <~ shouts.getAll!
         if err
             res.statusCode = 500
@@ -40,6 +42,26 @@ handleRequest = (req, res) ->
                     'Content-Length': currentOutputLength
             res.write currentOutput
         res.end!
+    | \POST
+        query = ""
+        req.on \data -> query += it
+        req.on \end ->
+            data = querystring.parse query
+            if not data?["terms[]"]?length and data?party
+                res.statusCode = 500
+            else
+                terms = data.["terms[]"]
+                party = data.party
+                ip = req.connection.remoteaddress
+                (err, result) <~ shouts.save ip, ...terms, party
+                switch
+                | err                => res.statusCode = 500
+                | result == \blocked => res.statusCode = 403
+                | otherwise          => res.write result
+                res.end!
+        req.resume!
+
+
     # if req.connection.remoteAddress in <[ 127.0.0.1 194.228.51.218 ]>
 
 fillRandomData = ->

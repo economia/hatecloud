@@ -51,8 +51,16 @@ window.Control = class Control
         | yes
             alertify.error "Pro tuto stranu jste již volil"
         | no
-            alertify.success "Děkujeme, vaše hlasování proběhlo v pořádku"
-            @voteWatch.registerVote party
+            out = {terms, party: @curentPartyId}
+            console.log out
+            request = $.post "./term" out
+            request.fail ->
+                switch it.status
+                | 403 => alertify.error "Pro tuto stranu jste již volil"
+                | _   => alertify.error "Omlouváme se, ale v aplikaci nastala chyba. Zkuste to prosím později."
+            request.done ->
+                alertify.success "Děkujeme, vaše hlasování proběhlo v pořádku"
+            # @voteWatch.registerVote party
 
 
     onTermClicked: (term) ->
