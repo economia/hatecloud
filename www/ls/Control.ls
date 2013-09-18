@@ -52,11 +52,11 @@ window.Control = class Control
             alertify.error "Pro tuto stranu jste již volil"
         | no
             out = {terms, party: @curentPartyId}
-            console.log out
             request = $.post "./term" out
             request.fail ->
                 switch it.status
                 | 403 => alertify.error "Pro tuto stranu jste již volil"
+                | 404 => alertify.error "Zadali jste neexistující stranu. To by nešlo."
                 | _   => alertify.error "Omlouváme se, ale v aplikaci nastala chyba. Zkuste to prosím později."
             request.done ->
                 alertify.success "Děkujeme, vaše hlasování proběhlo v pořádku"

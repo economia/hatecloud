@@ -47,18 +47,29 @@ handleRequest = (req, res) ->
         req.on \data -> query += it
         req.on \end ->
             data = querystring.parse query
-            if not data?["terms[]"]?length and data?party
+            validData = data?["terms[]"]?length > 0
+            validData &&= data?party
+            terms = data.["terms[]"]
+            party = data.party
+            validData = typeof! terms == \String
+            validData = typeof! party == \Array
+            unless  validData
                 res.statusCode = 500
-            else
-                terms = data.["terms[]"]
-                party = data.party
-                ip = req.connection.remoteaddress
-                (err, result) <~ shouts.save ip, ...terms, party
-                switch
-                | err                => res.statusCode = 500
-                | result == \blocked => res.statusCode = 403
-                | otherwise          => res.write result
                 res.end!
+            else
+                try
+                    ip = req.connection.remoteaddress
+                    (err, result) <~ shouts.save ip, ...terms, party
+                    switch
+                    | err                           => res.statusCode = 500
+                    | result == \non-existing-party => res.statusCode = 404
+                    | result == \blocked            => res.statusCode = 403
+                    | otherwise                     => res.write result
+                    res.end!
+                catch
+                    console.error "Chyba pri datech: #query"
+                    res.statusCode = 500
+                    res.end!
         req.resume!
 
 
