@@ -34,7 +34,6 @@ handleRequest = (req, res) ->
         if err
             res.statusCode = 500
         else
-            console.log \length currentOutput.length
             res.writeHead do
                 *   200
                 *   'Content-Type': 'application/json;charset=UTF-8'
