@@ -1,5 +1,5 @@
 window.Control = class Control
-    (@data, @$container, @wordCloudFactory, @formFactory) ->
+    (@data, @$container, @wordCloudFactory, @formFactory, @voteWatch) ->
         @drawSelector!
         @wordCloud = @prepareWordCloud!
         @form = @prepareForm!
@@ -43,6 +43,13 @@ window.Control = class Control
             ..on \submit @~onNewTerms
 
     onNewTerms: (evt, ...terms) ->
+        party = @curentPartyId
+        switch @voteWatch.didVote party
+        | yes
+            alertify.error "Pro tuto stranu jste již volil"
+        | no
+            alertify.success "Děkujeme, vaše hlasování proběhlo v pořádku"
+            @voteWatch.registerVote party
 
 
     onTermClicked: (term) ->
