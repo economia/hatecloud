@@ -11,3 +11,4 @@ module.exports =
         height: 650_px
         maxSize: 90_px
         minSize: 5_px
+        interval: 10_000_ms

@@ -58,13 +58,35 @@ fillRandomData = ->
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, Math.ceil Math.random! * 30_000
+
 loadFirstData = ->
     (err, terms) <~ shouts.getAllByParty!
     return console.error err if err
-    tasks = []
     generateGlobalCloud terms
     config.shouts.parties.forEach (party) ->
         generatePartyCloud terms, party
+generatingIndex = 0
+generatorRoundRobin = ->
+    if generatingIndex > config.shouts.parties.length
+        generatingIndex := 0
+    party = config.shouts.parties[generatingIndex]
+    if party
+        refreshParty party
+    else
+        refreshGlobal!
+    generatingIndex++
+
+refreshGlobal = ->
+    (err, terms) <~ shouts.getAllByParty!
+    return console.error err if err
+    generateGlobalCloud terms
+
+
+refreshParty = (party) ->
+    (err, terms) <~ shouts.get party
+    return console.error err if err
+    generatePartyCloud terms, party
+
 
 generateGlobalCloud = (terms) ->
     wordCloud.generate do
@@ -111,3 +133,4 @@ computeSize = (maxScore, score) ->
 
 loadFirstData!
 # fillRandomData!
+setInterval generatorRoundRobin, config.wordCloud.interval
