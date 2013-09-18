@@ -152,7 +152,9 @@ convertToGlobal = (terms) ->
         party: it.party
 
 convertToParty = (terms, party) ->
-    partyTerms = terms.filter -> it.party == party
+    partyTerms = terms.filter ->
+        | it.party  => it.party == party
+        | otherwise => true
     maxScore = Math.max ...partyTerms.map (.score)
     words = partyTerms.map ->
         text : it.term
