@@ -2,5 +2,6 @@
 /lib
 /www/screen.css
 /www/js/*
+/src/config.ls
 /www/script.js
 /*.sublime-workspace

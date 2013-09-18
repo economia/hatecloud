@@ -1,4 +1,4 @@
-(data) <~ $.getJSON "./temp/all.json"
+(data) <~ $.getJSON "./term/"
 control = new Control do
     data
     $ '#content'
