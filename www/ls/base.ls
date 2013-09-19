@@ -25,6 +25,7 @@ parties =
 
 new Tooltip!watchElements!
 (data) <~ $.getJSON "./term"
+wordList = new WordList data
 control = new Control do
     data
     $ '#content'
