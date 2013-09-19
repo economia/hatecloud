@@ -1,6 +1,5 @@
 &
     margin 0px
-    background #ccc
     float left
     width 100%
     list-style-type none
@@ -14,23 +13,40 @@
         text-align center
         font-size 0.72em
         font-weight bold
+        background #ccc
         border-left 1px solid white
         border-bottom 1px solid #f0f0f0
         color #777
+        .arrow
+            display block
+            position absolute
+            bottom 0px
+            transition bottom 0.4s
+            left (@width / 2 - 10)
+            width 0px
+            height 0px
+            border-style solid
+            border-width 10px 10px 0 10px
+            border-color #ccc transparent transparent transparent
         &:first-child
             border-left 0px
         &.active
             color black
             background #a6a6a6
             border-bottom-color #d2d2d2
+            .arrow
+                bottom -10px
+                border-top-color @background
         &:hover
             color black
             cursor pointer
             background #aaa
+            .arrow
+                border-top-color @background
         &:active
             background #999
-        .arrow
-            display none
+            .arrow
+                border-top-color @background
         img.on
             display none
         img.off
@@ -48,14 +64,4 @@
                 display none
             img.on
                 display block
-            .arrow
-                display block
-                position absolute
-                bottom -10px
-                left (@width / 2 - 10)
-                width 0px
-                height 0px
-                border-style solid
-                border-width 10px 10px 0 10px
-                border-color #a6a6a6 transparent transparent transparent
 
