@@ -6,6 +6,7 @@
     list-style-type none
     padding 0px
     li
+        position relative
         float left
         padding 0px
         padding-bottom 8px
@@ -26,6 +27,8 @@
             background #aaa
         &:active
             background #999
+        .arrow
+            display none
         img.on
             display none
         img.off
@@ -43,3 +46,14 @@
                 display none
             img.on
                 display block
+            .arrow
+                display block
+                position absolute
+                bottom -10px
+                left (@width / 2 - 10)
+                width 0px
+                height 0px
+                border-style solid
+                border-width 10px 10px 0 10px
+                border-color #a6a6a6 transparent transparent transparent
+

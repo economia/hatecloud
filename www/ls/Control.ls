@@ -16,6 +16,7 @@ window.Control = class Control
                     ..append "<img src='img/loga/#{party}-on.png' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
                     ..append "<img src='img/loga/#{party}-off.png' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
                     ..append @parties[party].name
+                    ..append "<div class='arrow'></div>"
                     ..appendTo @$selector
                     ..on \click ~>
                         @$selector.find '.active' .removeClass \active
