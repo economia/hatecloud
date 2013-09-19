@@ -8,23 +8,22 @@ require! {
     './WordCloud'
     './config'
     './AjaxHandler'
+    './OutputCache'
 }
 redisClient = redis.createClient config.redis.port, config.redis.address
 
 antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
-ajaxHandler = new AjaxHandler shouts
+outputCache = new OutputCache
+ajaxHandler = new AjaxHandler shouts, outputCache
 wordCloud = new WordCloud!
-currentCloudObject = {}
-currentOutput = null
-currentOutputLength = 0
-
 fileServer = new StaticServer "./www"
+
 server = http.createServer (req, res) ->
     url = req.url.split '/'
     switch url[1]
     | "term"
-        ajaxHandler.handle req, res, currentOutput, currentOutputLength
+        ajaxHandler.handle req, res
     | otherwise
         req.on \end -> fileServer.serve req, res
         req.resume!
@@ -88,7 +87,7 @@ generateGlobalCloud = (terms) ->
         config.wordCloud
         (err, cloud) ->
             return console.error err if err
-            updateCurrent cloud
+            outputCache.set cloud, null
 
 
 generatePartyCloud = (terms, party) ->
@@ -97,15 +96,7 @@ generatePartyCloud = (terms, party) ->
         config.wordCloud
         (err, cloud) ->
             return console.error err if err
-            updateCurrent cloud, party
-
-
-updateCurrent = (data, party = null) ->
-    if party == null then party = 'all'
-    console.log "Updating current #party"
-    currentCloudObject[party] := data
-    currentOutput             := new Buffer JSON.stringify currentCloudObject
-    currentOutputLength       := currentOutput.length
+            outputCache.set cloud, party
 
 
 convertToWords = (terms, party = null) ->

@@ -1,12 +1,12 @@
 require! querystring
 module.exports = class AjaxHandler
-    (@shouts) ->
-    handle: (req, res, currentOutput, currentOutputLength) ->
+    (@shouts, @outputCache) ->
+    handle: (req, res) ->
         switch req.method
         | \GET => @hadleGetCloud ...
         | \POST => @handlePostTerm ...
 
-    hadleGetCloud: (req, res, currentOutput, currentOutputLength) ->
+    hadleGetCloud: (req, res) ->
         (err, data) <~ @shouts.getAll!
         if err
             res.statusCode = 500
@@ -14,8 +14,8 @@ module.exports = class AjaxHandler
             res.writeHead do
                 *   200
                 *   'Content-Type': 'application/json;charset=UTF-8'
-                    'Content-Length': currentOutputLength
-            res.write currentOutput
+                    'Content-Length': @outputCache.currentOutputLength
+            res.write @outputCache.currentOutput
         res.end!
 
     handlePostTerm: (req, res) ->
