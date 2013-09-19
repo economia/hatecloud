@@ -1,16 +1,47 @@
 @import colors
 @import prefixes
+@import tooltip
 body
     margin 0px
     font-family arial, sans-serif
     #content
         width 650px
+        position relative
+        .button
+            float left
+            color white
+            em
+                font-size 0.72em
+                font-style normal
+                padding-left 5px
+            span
+                float left
+                display block
+                border 1px solid white
+                border-radius 50%
+                text-align center
+                width 19px
+                height 19px
+            &:hover
+                cursor pointer
+                color #ccc
+                span
+                    border-color #ccc
+            &:active
+                cursor pointer
+                color #aaa
+                border-color #aaa
+                span
+                    border-color #aaa
+
         .selector
             @import selector
 
         .wordCloud
             width 650px
             height 650px
+            position absolute
+            top 90px
             span:hover
             text:hover
                 cursor pointer
@@ -70,3 +101,14 @@ body
 
         .form
             @import form
+        .button.help
+            position absolute
+            right 0px
+            top 715px
+            background black
+            padding 5px 8px 5px 6px
+            border-radius 9px
+            background rgba(0,0,0,0.8)
+            &:hover
+                cursor help
+

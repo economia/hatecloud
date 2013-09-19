@@ -23,7 +23,7 @@ parties =
     sz:
         name: \SZ
 
-
+new Tooltip!watchElements!
 (data) <~ $.getJSON "./term"
 control = new Control do
     data

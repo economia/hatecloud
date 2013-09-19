@@ -37,7 +37,7 @@ window.Form = class Form implements jQuery.eventEmitter
     createDom: ->
         @$element = $ "<form></form>"
         $cancelButton = $ "<div></div>"
-            ..addClass \cancelButton
+            ..addClass 'button cancel'
             ..appendTo @$element
             ..html "<span>+</span><em>zrušit</em>"
             ..on \click (evt) ~>
