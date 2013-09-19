@@ -32,5 +32,3 @@ control = new Control do
     -> new Form ...
     new VoteWatcher
     parties
-control.$selector.find "li" .first!click!
-control.onTermClicked \Arogance
