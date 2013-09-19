@@ -6,7 +6,8 @@ window.Form = class Form implements jQuery.eventEmitter
     addTerm: (term) ->
         @display! unless @displayed
         maxIndex = @$inputs.length - 1
-        for index, $input of @$inputs
+        for index, $pair of @$inputs
+            $input = $pair.find "input"
             index = parseInt index, 10
             if $input.val! in ['', term] or index == maxIndex
                 $input.val term
@@ -35,6 +36,13 @@ window.Form = class Form implements jQuery.eventEmitter
 
     createDom: ->
         @$element = $ "<form></form>"
+        $cancelButton = $ "<div></div>"
+            ..addClass \cancelButton
+            ..appendTo @$element
+            ..html "<span>+</span><em>zrušit</em>"
+            ..on \click (evt) ~>
+                evt.preventDefault!
+                @hide!
         @$inputs = for i in [1 to 3]
             $pair = $ "<div></div>"
                 ..addClass \pair
