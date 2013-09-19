@@ -26,9 +26,9 @@ module.exports = class AjaxHandler
             if data is null
                 @endBadly res
             else
-                {terms, party} = data
                 try
-                    ip = req.connection.remoteaddress
+                    {terms, party} = data
+                    ip = req.connection.remoteAddress
                     (err, result) <~ @shouts.save ip, ...terms, party
                     switch
                     | err                           => res.statusCode = 500
