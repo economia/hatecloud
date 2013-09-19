@@ -7,11 +7,13 @@ require! {
     './Antispam'
     './WordCloud'
     './config'
+    './AjaxHandler'
 }
 redisClient = redis.createClient config.redis.port, config.redis.address
 
 antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
+ajaxHandler = new AjaxHandler shouts
 wordCloud = new WordCloud!
 currentCloudObject = {}
 currentOutput = null
@@ -22,56 +24,11 @@ server = http.createServer (req, res) ->
     url = req.url.split '/'
     switch url[1]
     | "term"
-        handleRequest req, res
+        ajaxHandler.handle req, res, currentOutput, currentOutputLength
     | otherwise
-        req.on \end ->
-            fileServer.serve req, res
+        req.on \end -> fileServer.serve req, res
         req.resume!
 server.listen 80
-
-handleRequest = (req, res) ->
-    switch req.method
-    | \GET
-        (err, data) <~ shouts.getAll!
-        if err
-            res.statusCode = 500
-        else
-            res.writeHead do
-                *   200
-                *   'Content-Type': 'application/json;charset=UTF-8'
-                    'Content-Length': currentOutputLength
-            res.write currentOutput
-        res.end!
-    | \POST
-        query = ""
-        req.on \data -> query += it
-        req.on \end ->
-            data = querystring.parse query
-            validData = data?["terms[]"]?length > 0
-            validData &&= data?party
-            terms = data.["terms[]"]
-            party = data.party
-            validData = typeof! party == \String
-            validData = typeof! terms == \Array
-            unless  validData
-                res.statusCode = 500
-                res.end!
-            else
-                try
-                    ip = req.connection.remoteaddress
-                    (err, result) <~ shouts.save ip, ...terms, party
-                    switch
-                    | err                           => res.statusCode = 500
-                    | result == \non-existing-party => res.statusCode = 404
-                    | result == \blocked            => res.statusCode = 403
-                    | otherwise                     => res.write result
-                    res.end!
-                catch
-                    console.error "Chyba pri datech: #query"
-                    res.statusCode = 500
-                    res.end!
-        req.resume!
-
 
     # if req.connection.remoteAddress in <[ 127.0.0.1 194.228.51.218 ]>
 
