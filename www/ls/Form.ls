@@ -1,5 +1,5 @@
 window.Form = class Form implements jQuery.eventEmitter
-    (@$container) ->
+    (@autocompleteList, @$container) ->
         @createDom!
         @displayed = no
 
@@ -51,6 +51,7 @@ window.Form = class Form implements jQuery.eventEmitter
                 ..appendTo $pair
             $ "<input type='text' id='reason-#i' />"
                 ..appendTo $pair
+                ..autocomplete source: @autocompleteList
             $pair.appendTo @$element
         $submit = $ "<input type='submit' value='Odeslat' />"
             ..appendTo @$element

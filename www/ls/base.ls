@@ -30,6 +30,6 @@ control = new Control do
     data
     $ '#content'
     -> new WordCloud ...
-    -> new Form ...
+    (...args)-> new Form wordList.list, ...args
     new VoteWatcher
     parties
