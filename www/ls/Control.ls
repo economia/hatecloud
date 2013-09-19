@@ -1,5 +1,5 @@
 window.Control = class Control
-    (@data, @$container, @wordCloudFactory, @formFactory, @voteWatch) ->
+    (@data, @$container, @wordCloudFactory, @formFactory, @voteWatch, @parties) ->
         @drawSelector!
         @wordCloud = @prepareWordCloud!
         @form = @prepareForm!
@@ -13,7 +13,9 @@ window.Control = class Control
             continue if _party is \all
             let party = _party
                 item = $ "<li></li>"
-                    ..html party
+                    ..append "<img src='img/loga/#{party}-on.png' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
+                    ..append "<img src='img/loga/#{party}-off.png' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
+                    ..append @parties[party].name
                     ..appendTo @$selector
                     ..on \click ~>
                         @$selector.find '.active' .removeClass \active

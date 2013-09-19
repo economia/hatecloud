@@ -7,7 +7,8 @@
     padding 0px
     li
         float left
-        padding 6px 0px
+        padding 0px
+        padding-bottom 8px
         width (650 / 8 - 1)px
         text-align center
         border-left 1px solid #444
@@ -20,3 +21,19 @@
             background #aaa
         &:active
             background #888
+        img.on
+            display none
+        img.off
+            display block
+            opacity 0.7
+        img
+            margin-left 4px
+        &:hover
+        &:active
+            img.off
+                opacity 1
+        &.active
+            img.off
+                display none
+            img.on
+                display block
