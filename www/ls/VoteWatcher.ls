@@ -7,6 +7,7 @@ window.VoteWatcher = class VoteWatcher
 
     didVote: (id) ->
         id in @voted
+        no
 
     registerVote: (id) ->
         @voted.push id
