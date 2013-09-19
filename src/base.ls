@@ -37,7 +37,7 @@ server.listen 80
 
     # if req.connection.remoteAddress in <[ 127.0.0.1 194.228.51.218 ]>
 
-fillRandomData = ->
+fillInitialData = ->
     console.log 'filling random data'
     words_party =
         top  : <[Kalousek Kníže Spánek Gripeny Šlechta Přeběhlictví Arogance Škrty Elity Korupce ]>
@@ -51,8 +51,8 @@ fillRandomData = ->
 
     for party, words of words_party
         words.forEach (word) ->
-            shouts.saveApproved word, party, Math.ceil Math.random! * 30_000
-# fillRandomData!
+            shouts.saveApproved word, party, 10 #Math.ceil Math.random! * 30_000
+# fillInitialData!
 
 
 
