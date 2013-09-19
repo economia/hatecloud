@@ -57,7 +57,7 @@ window.Control = class Control
         party = @curentPartyId
         switch @voteWatch.didVote party
         | yes
-            alertify.error "Pro tuto stranu jste již volil"
+            alertify.error "Pro tuto stranu jste již hlasoval"
         | no
             out = {terms, party: @curentPartyId}
             request = $.post "./term" out
@@ -74,7 +74,7 @@ window.Control = class Control
     onTermClicked: (term = null) ->
         return if @curentPartyId is \all
         switch @voteWatch.didVote @curentPartyId
-        | yes => alertify.error "Pro tuto stranu jste již volil"
+        | yes => alertify.error "Pro tuto stranu jste již hlasoval"
         | no  => if term then @form.addTerm term else @form.display!
 
     registerClickHandlers: ->
