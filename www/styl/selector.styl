@@ -11,16 +11,21 @@
         padding-bottom 8px
         width (650 / 8 - 1)px
         text-align center
-        border-left 1px solid #444
+        font-size 0.72em
+        font-weight bold
+        border-left 1px solid white
+        color #777
         &:first-child
             border-left 0px
         &.active
-            background #888
+            color black
+            background #a6a6a6
         &:hover
+            color #e2e2e2
             cursor pointer
             background #aaa
         &:active
-            background #888
+            background #999
         img.on
             display none
         img.off
@@ -28,6 +33,7 @@
             opacity 0.7
         img
             margin-left 4px
+            margin-bottom 4px
         &:hover
         &:active
             img.off
