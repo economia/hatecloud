@@ -97,7 +97,8 @@ loadFirstData = ->
     return console.error err if err
     generateGlobalCloud terms
     config.shouts.parties.forEach (party) ->
-        generatePartyCloud terms, party
+        partyTerms = terms.filter -> it.party == party
+        generatePartyCloud partyTerms, party
 generatingIndex = 0
 generatorRoundRobin = ->
     if generatingIndex > config.shouts.parties.length
@@ -123,7 +124,7 @@ refreshParty = (party) ->
 
 generateGlobalCloud = (terms) ->
     wordCloud.generate do
-        convertToGlobal terms
+        convertToWords terms
         config.wordCloud
         (err, cloud) ->
             return console.error err if err
@@ -131,7 +132,7 @@ generateGlobalCloud = (terms) ->
 
 generatePartyCloud = (terms, party) ->
     wordCloud.generate do
-        convertToParty terms, party
+        convertToWords terms, party
         config.wordCloud
         (err, cloud) ->
             return console.error err if err
@@ -144,21 +145,14 @@ updateCurrent = (data, party = null) ->
     currentOutput             := new Buffer JSON.stringify currentCloudObject
     currentOutputLength       := currentOutput.length
 
-convertToGlobal = (terms) ->
+convertToWords = (terms, party = null) ->
     maxScore = Math.max ...terms.map (.score)
     words = terms.map ->
-        text : it.term
-        size: computeSize maxScore, it.score
-        party: it.party
-
-convertToParty = (terms, party) ->
-    partyTerms = terms.filter ->
-        | it.party  => it.party == party
-        | otherwise => true
-    maxScore = Math.max ...partyTerms.map (.score)
-    words = partyTerms.map ->
-        text : it.term
-        size: computeSize maxScore, it.score
+        word =
+            text : it.term
+            size: computeSize maxScore, it.score
+        if it.party then word.party = that
+        word
 
 computeSize = (maxScore, score) ->
     config.wordCloud.minSize + config.wordCloud.maxSize * score / maxScore
