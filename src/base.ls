@@ -87,10 +87,10 @@ fillRandomData = ->
         kdu  : <[Otazníky Konzervatismus Křešťanství Nestálost Osobnosti Nejasnost Čunek Prodejnost Nevýraznost Nemodernost]>
         sz   : <[Levicovost Nečitelnost Osobnosti Marnost Ekologie Program Nezkušenost Zklamání Energetika  Radikalismus]>
 
-
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, Math.ceil Math.random! * 30_000
+
 
 loadFirstData = ->
     (err, terms) <~ shouts.getAllByParty!
@@ -99,6 +99,8 @@ loadFirstData = ->
     config.shouts.parties.forEach (party) ->
         partyTerms = terms.filter -> it.party == party
         generatePartyCloud partyTerms, party
+
+
 generatingIndex = 0
 generatorRoundRobin = ->
     if generatingIndex > config.shouts.parties.length
@@ -109,6 +111,7 @@ generatorRoundRobin = ->
     else
         refreshGlobal!
     generatingIndex++
+
 
 refreshGlobal = ->
     (err, terms) <~ shouts.getAllByParty!
@@ -130,6 +133,7 @@ generateGlobalCloud = (terms) ->
             return console.error err if err
             updateCurrent cloud
 
+
 generatePartyCloud = (terms, party) ->
     wordCloud.generate do
         convertToWords terms, party
@@ -138,12 +142,14 @@ generatePartyCloud = (terms, party) ->
             return console.error err if err
             updateCurrent cloud, party
 
+
 updateCurrent = (data, party = null) ->
     if party == null then party = 'all'
     console.log "Updating current #party"
     currentCloudObject[party] := data
     currentOutput             := new Buffer JSON.stringify currentCloudObject
     currentOutputLength       := currentOutput.length
+
 
 convertToWords = (terms, party = null) ->
     maxScore = Math.max ...terms.map (.score)
@@ -154,9 +160,9 @@ convertToWords = (terms, party = null) ->
         if it.party then word.party = that
         word
 
+
 computeSize = (maxScore, score) ->
     config.wordCloud.minSize + config.wordCloud.maxSize * score / maxScore
-
 
 
 
