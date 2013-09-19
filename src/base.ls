@@ -8,6 +8,7 @@ require! {
     './WordCloud'
     './config'
     './AjaxHandler'
+    './WordCloudDataConnector'
     './OutputCache'
 }
 redisClient = redis.createClient config.redis.port, config.redis.address
@@ -17,6 +18,11 @@ shouts = new Shouts redisClient, antispam, config.shouts.parties
 outputCache = new OutputCache
 ajaxHandler = new AjaxHandler shouts, outputCache
 wordCloud = new WordCloud!
+wordCloudDataConnector = new WordCloudDataConnector do
+    shouts
+    wordCloud
+    outputCache
+    config
 fileServer = new StaticServer "./www"
 
 server = http.createServer (req, res) ->
@@ -46,74 +52,11 @@ fillRandomData = ->
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, Math.ceil Math.random! * 30_000
-
-
-loadFirstData = ->
-    (err, terms) <~ shouts.getAllByParty!
-    return console.error err if err
-    generateGlobalCloud terms
-    config.shouts.parties.forEach (party) ->
-        partyTerms = terms.filter -> it.party == party
-        generatePartyCloud partyTerms, party
-
-
-generatingIndex = 0
-generatorRoundRobin = ->
-    if generatingIndex > config.shouts.parties.length
-        generatingIndex := 0
-    party = config.shouts.parties[generatingIndex]
-    if party
-        refreshParty party
-    else
-        refreshGlobal!
-    generatingIndex++
-
-
-refreshGlobal = ->
-    (err, terms) <~ shouts.getAllByParty!
-    return console.error err if err
-    generateGlobalCloud terms
-
-
-refreshParty = (party) ->
-    (err, terms) <~ shouts.get party
-    return console.error err if err
-    generatePartyCloud terms, party
-
-
-generateGlobalCloud = (terms) ->
-    wordCloud.generate do
-        convertToWords terms
-        config.wordCloud
-        (err, cloud) ->
-            return console.error err if err
-            outputCache.set cloud, null
-
-
-generatePartyCloud = (terms, party) ->
-    wordCloud.generate do
-        convertToWords terms, party
-        config.wordCloud
-        (err, cloud) ->
-            return console.error err if err
-            outputCache.set cloud, party
-
-
-convertToWords = (terms, party = null) ->
-    maxScore = Math.max ...terms.map (.score)
-    words = terms.map ->
-        word =
-            text : it.term
-            size: computeSize maxScore, it.score
-        if it.party then word.party = that
-        word
-
-
-computeSize = (maxScore, score) ->
-    config.wordCloud.minSize + config.wordCloud.maxSize * score / maxScore
-
-
-
-loadFirstData!
 # fillRandomData!
-setInterval generatorRoundRobin, config.wordCloud.interval
+
+
+
+
+
+wordCloudDataConnector.loadFirstData!
+setInterval wordCloudDataConnector~generateNextCloud, config.wordCloud.interval
