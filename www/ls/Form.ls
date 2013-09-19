@@ -36,8 +36,14 @@ window.Form = class Form implements jQuery.eventEmitter
     createDom: ->
         @$element = $ "<form></form>"
         @$inputs = for i in [1 to 3]
-            $input = $ "<input type='text' />"
-                ..appendTo @$element
+            $pair = $ "<div></div>"
+                ..addClass \pair
+            $ "<label for='reason-#i'></label>"
+                ..html "#i. důvod"
+                ..appendTo $pair
+            $ "<input type='text' id='reason-#i' />"
+                ..appendTo $pair
+            $pair.appendTo @$element
         $submit = $ "<input type='submit' value='Odeslat' />"
             ..appendTo @$element
             ..on \click @~submit
