@@ -48,7 +48,7 @@ window.WordCloud = class WordCloud
                 position:absolute;
                 left: #{it.x}px;
                 top: #{it.y}px;'
-                class='#{it.className || ''} #{if it.rotate then 'rot' else ''}'
+                class='#{it.className || ''} #{if it.rotate then 'rot' else ''} text'
                 data-x='#{it.x}'
                 data-y='#{it.y}'
                 >#{it.text}</span>"""

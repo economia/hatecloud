@@ -41,7 +41,10 @@ window.Control = class Control
         @$wordCloud = $ "<div></div>"
             ..addClass \wordCloud
             ..appendTo @$container
-        @wordCloudFactory @$wordCloud
+        $wordCloudSubcontainer = $ "<div></div>"
+            ..addClass \subcontainer
+            ..appendTo @$wordCloud
+        @wordCloudFactory $wordCloudSubcontainer
 
     prepareForm: ->
         @$form = $ "<div></div>"
