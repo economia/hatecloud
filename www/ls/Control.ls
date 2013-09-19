@@ -75,7 +75,7 @@ window.Control = class Control
         return if @curentPartyId is \all
         switch @voteWatch.didVote @curentPartyId
         | yes => alertify.error "Pro tuto stranu jste již volil"
-        | no  => if term then @form.addTerm term
+        | no  => if term then @form.addTerm term else @form.display!
 
     registerClickHandlers: ->
         $ document .on \click '.wordCloud text' (evt) ~>
