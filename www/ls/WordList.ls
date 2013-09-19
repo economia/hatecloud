@@ -5,3 +5,4 @@ window.WordList = class WordList
         for party, words of wordCloudData
             for {text:word} in words
                 if word not in @list then @list.push word
+        @list .= sort!
