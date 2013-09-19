@@ -50,6 +50,20 @@ body
             text:active
                 opacity 0.9
 
+            .button
+                position absolute
+                bottom -15px
+                background black
+                padding 5px 8px 5px 6px
+                border-radius 9px
+                background rgba(0,0,0,0.8)
+                &.help
+                    right 0px
+                    &:hover
+                        cursor help
+                &.add
+                    left 0px
+
             .ods
             &.ods span
             &.ods text
@@ -98,17 +112,9 @@ body
                 span:active
                     cursor default
                     opacity 1
+                .button.add
+                    display none
 
         .form
             @import form
-        .button.help
-            position absolute
-            right 0px
-            bottom -15px
-            background black
-            padding 5px 8px 5px 6px
-            border-radius 9px
-            background rgba(0,0,0,0.8)
-            &:hover
-                cursor help
 

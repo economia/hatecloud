@@ -5,6 +5,7 @@ window.Control = class Control
         @form = @prepareForm!
         @drawParty \all
         @drawHelpButton!
+        @drawAddTermButton!
         @registerClickHandlers!
 
     drawSelector: ->
@@ -67,11 +68,11 @@ window.Control = class Control
                 @voteWatch.registerVote party
 
 
-    onTermClicked: (term) ->
+    onTermClicked: (term = null) ->
         return if @curentPartyId is \all
         switch @voteWatch.didVote @curentPartyId
         | yes => alertify.error "Pro tuto stranu jste již volil"
-        | no  => @form.addTerm term
+        | no  => if term then @form.addTerm term
 
     registerClickHandlers: ->
         $ document .on \click '.wordCloud text' (evt) ~>
@@ -86,3 +87,11 @@ window.Control = class Control
             ..attr \data-tooltip escape "<p>Dokážete si v současné situaci vybrat jednu z kandidujících stran, aniž byste si museli říct, že volíte „nejmenší zlo“? Proč jsou pro vás volby problematické? Jaké jsou důvody, kvůli kterým váháte nebo už dokonce víte, že svůj hlas neodevzdáte? V aplikaci serveru IHNED.cz můžete u každé strany, která má reálnou šanci dostat se do sněmovny, vybrat tři důvody, kvůli nimž je pro vás nepřijatelná.</p>
                 <p>Klikněte na logo strany, objeví se vám nejčastěji zmiňované důvody ostatních lidí. Vyberte kliknutím nabízená slova ta, která nejvíce reprezentuje váš názor. Nebo zvolte možnost „přidat slovo (vlevo dole) a zadejte vlastní slova. Můžete navolit maximálně tři důvody a kombinovat slova v nabídce s vlastními výrazy. <em>(Redakce si vyhrazuje právo vyřadit nebo upravit nevhodné a vulgární výrazy)</em>.</p>"
             ..appendTo @$wordCloud
+
+    drawAddTermButton: ->
+        $ "<div></div>"
+            ..addClass 'button add'
+            ..html "<span>+</span><em>přidat slovo</em>"
+            ..appendTo @$wordCloud
+            ..on \click ~> @onTermClicked!
+
