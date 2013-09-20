@@ -7,6 +7,7 @@ module.exports = class WordCloudDataConnector
         (err, terms) <~ @shouts.getAllByParty!
         return console.error err if err
         @generateGlobalCloud terms
+        @generateGlobalCloudImage terms
         @config.shouts.parties.forEach (party) ~>
             partyTerms = terms.filter -> it.party == party
             @generatePartyCloud partyTerms, party
@@ -27,7 +28,9 @@ module.exports = class WordCloudDataConnector
         (err, terms) <~ @shouts.getAllByParty!
         switch
         | err => console.error err
-        | _   => @generateGlobalCloud terms
+        | otherwise
+            @generateGlobalCloud terms
+            @generateGlobalCloudImage terms
 
 
     refreshParty: (party) ->
@@ -39,31 +42,40 @@ module.exports = class WordCloudDataConnector
 
     generateGlobalCloud: (terms) ->
         @wordCloud.generate do
-            @convertToWords terms
+            @convertToWords @config.wordCloud, terms
             @config.wordCloud
             (err, cloud) ~>
                 | err => console.error err
                 | _   => @outputCache.set cloud, null
 
+    generateGlobalCloudImage: (terms) ->
+        @wordCloud.generatePNGBuffer do
+            @convertToWords @config.wordCloud.smallCloud, terms
+            @config.wordCloud.smallCloud
+            (err, buff) ~>
+                | err => console.error err
+                | _   => fs.writeFile "#__dirname/../www/img/cloud.png" buff
+
+
 
     generatePartyCloud: (terms, party) ->
         @wordCloud.generate do
-            @convertToWords terms, party
+            @convertToWords @config.wordCloud, terms, party
             @config.wordCloud
             (err, cloud) ~>
                 | err => console.error err
                 | _   => @outputCache.set cloud, party
 
 
-    convertToWords: (terms, party = null) ->
+    convertToWords: (sizes, terms, party = null) ->
         maxScore = Math.max ...terms.map (.score)
         words = terms.map ~>
             word =
                 text : it.term
-                size: @computeSize maxScore, it.score
+                size: @computeSize sizes, maxScore, it.score
             if it.party then word.party = that
             word
 
 
-    computeSize: (maxScore, score) ->
-        @config.wordCloud.minSize + @config.wordCloud.maxSize * score / maxScore
+    computeSize: (sizes, maxScore, score) ->
+        sizes.minSize + sizes.maxSize * score / maxScore

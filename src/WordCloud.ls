@@ -31,7 +31,7 @@ module.exports = class WordCloud
             output
         cb null output
 
-    getPNG: (words, {width, height, colors}:options, cb) ->
+    generatePNGBuffer: (words, {width, height, colors}:options, cb) ->
         require! canvg
         (err, wordcloud) <~ @generate words, options
         return cb err if err

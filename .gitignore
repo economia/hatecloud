@@ -4,4 +4,5 @@
 /www/js/*
 /src/config.ls
 /www/script.js
+/www/img/cloud.png
 /*.sublime-workspace

@@ -63,7 +63,7 @@ describe 'WordCloud' ->
             ano:  \#282560
         width = 350
         height = 350
-        (err, buffer) <~ wordCloud.getPNG words, {colors, width, height}
+        (err, buffer) <~ wordCloud.generatePNGBuffer words, {colors, width, height}
         expect buffer .to.be.a Buffer
         expect buffer.length .to.be.greaterThan 10
         done!

@@ -12,3 +12,17 @@ module.exports =
         maxSize: 90_px
         minSize: 5_px
         interval: 10_000_ms
+        smallCloud:
+            width: 295_px
+            height: 195_px
+            maxSize: 45_px
+            minSize: 5_px
+            colors:
+                kscm : \#e3001a
+                cssd : \#f29400
+                ods  : \#006ab3
+                top  : \#7c0042
+                spoz : \#FB9A99
+                sz   : \#00AD00
+                kdu  : \#FFE03E
+                ano  : \#282560
