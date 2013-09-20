@@ -30,7 +30,6 @@ describe 'WordCloud' ->
             {cloud, party}
         paired.forEach (pair) -> output[pair.party] = pair.cloud
         done!
-
     test 'should generate JSON output with classnames by parties' (done) ->
         words = for strana, words of words_party
             words.map ->
@@ -43,6 +42,30 @@ describe 'WordCloud' ->
         expect cloud .to.be.an \array
         expect cloud.length .to.be.greaterThan 10
         output['all'] = cloud
+        done!
+
+    test 'should output PNG image' (done) ->
+        words = for strana, words of words_party
+            words.map ->
+                text: it
+                size: 5 + Math.random! * 90
+                party: strana
+
+        words = [].concat ...words
+        colors =
+            kscm: \#e3001a
+            cssd: \#f29400
+            ods:  \#006ab3
+            top:  \#7c0042
+            spoz: \#FB9A99
+            sz:   \#00AD00
+            kdu:  \#FFE03E
+            ano:  \#282560
+        width = 350
+        height = 350
+        (err, buffer) <~ wordCloud.getPNG words, {colors, width, height}
+        expect buffer .to.be.a Buffer
+        expect buffer.length .to.be.greaterThan 10
         done!
     after (done) ->
         <~ fs.writeFile "#__dirname/../www/temp/all.json" JSON.stringify output
