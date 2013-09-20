@@ -6,8 +6,7 @@ window.Form = class Form implements jQuery.eventEmitter
     addTerm: (term) ->
         @display! unless @displayed
         maxIndex = @$inputs.length - 1
-        for index, $pair of @$inputs
-            $input = $pair.find "input"
+        for index, $input of @$inputs
             index = parseInt index, 10
             if $input.val! in ['', term] or index == maxIndex
                 $input.val term
@@ -49,10 +48,11 @@ window.Form = class Form implements jQuery.eventEmitter
             $ "<label for='reason-#i'></label>"
                 ..html "#i. důvod"
                 ..appendTo $pair
-            $ "<input type='text' id='reason-#i' />"
+            $input = $ "<input type='text' id='reason-#i' />"
                 ..appendTo $pair
                 ..autocomplete source: @autocompleteList
             $pair.appendTo @$element
+            $input
         $submit = $ "<input type='submit' value='Odeslat' />"
             ..appendTo @$element
             ..on \click @~submit
