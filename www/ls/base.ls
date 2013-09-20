@@ -33,7 +33,3 @@ control = new Control do
     (...args)-> new Form wordList.list, ...args
     new VoteWatcher
     parties
-
-control
-    ..drawParty \ods
-    ..onTermClicked!
