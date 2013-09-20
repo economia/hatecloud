@@ -67,6 +67,3 @@ describe 'WordCloud' ->
         expect buffer .to.be.a Buffer
         expect buffer.length .to.be.greaterThan 10
         done!
-    after (done) ->
-        <~ fs.writeFile "#__dirname/../www/temp/all.json" JSON.stringify output
-        done!
