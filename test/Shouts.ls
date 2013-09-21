@@ -92,7 +92,7 @@ describe 'Shouts' ->
                 expect results.1.term .to.equal \termA
                 expect results.1.score .to.equal 1
                 done!
-        describe 'Retrieve - all words with party information' (done) ->
+        describe 'Retrieve - all words with party information' ->
             test 'should retrieve in proper format' (done) ->
                 (err, results) <~ shouts.getAllByParty!
                 expect err .to.be null
@@ -101,6 +101,17 @@ describe 'Shouts' ->
                 expect results[0].term .to.equal \termB
                 expect results[0].party .to.equal \ods
                 done!
+
+        describe 'Retrieve - unapproved' ->
+            test 'should retrieve unapproved shouts' (done) ->
+                (err, unapproved) <~ shouts.getUnapproved
+                expect err .to.be null
+                expect unapproved .to.have.length 1
+                expect unapproved.0 .to.have.property \term \termC
+                expect unapproved.0 .to.have.property \partyId \ods
+                expect unapproved.0 .to.have.property \score 1
+                done!
+
 
     describe 'Antispam' ->
         test 'Shout should be querying Antispam for permission to vote' ->

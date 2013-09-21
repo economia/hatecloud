@@ -83,20 +83,28 @@ module.exports = class Shouts
         | null => cb null no
         | _    => cb null yes
 
-    approve: (approvedTerm, cb) ->
+    getUnapproved: (cb) ->
         (err, allUnapproved) <~ @redisClient.zrangebyscore do
             @getStorePending!
             0
             +Infinity
             \WITHSCORES
         return cb err if err
-        tasks = []
-        for let i in [0 til allUnapproved.length by 2]
-            [term, partyId] = allUnapproved[i].split @pendingDelimiter
-            return if term isnt approvedTerm
+        list = for let i in [0 til allUnapproved.length by 2]
+            record = allUnapproved[i]
+            [term, partyId] = record.split @pendingDelimiter
             score = parseInt allUnapproved[i + 1], 10
+            {term, partyId, score, record}
+        cb null list
+
+
+    approve: (approvedTerm, cb) ->
+        (err, allUnapproved) <~ @getUnapproved
+        termUnapproved = allUnapproved.filter -> it.term is approvedTerm
+        tasks = []
+        termUnapproved.forEach ({term, partyId, score, record}) ~>
             tasks.push ~> @saveApproved term, partyId, score, it
-            tasks.push ~> @redisClient.zrem @getStorePending!, allUnapproved[i], it
+            tasks.push ~> @redisClient.zrem @getStorePending!, record, it
         (err) <~ async.parallel tasks
         return cb err if err
         cb null tasks.length / 2
