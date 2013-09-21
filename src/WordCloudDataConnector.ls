@@ -1,16 +1,20 @@
+require! async
 module.exports = class WordCloudDataConnector
     roundRobinIndex: 0
     (@shouts, @wordCloud, @outputCache,{shouts, wordCloud}:config) ->
         @config = config
 
-    loadFirstData: ->
+    loadFirstData: (cb) ->
         (err, terms) <~ @shouts.getAllByParty!
         return console.error err if err
-        @generateGlobalCloud terms
-        @generateGlobalCloudImage terms
-        @config.shouts.parties.forEach (party) ~>
+        tasks = []
+        tasks.push (cb) ~> @generateGlobalCloud terms, cb
+        tasks.push (cb) ~> @generateGlobalCloudImage terms, cb
+        tasks ++= @config.shouts.parties.map (party) ~>
             partyTerms = terms.filter -> it.party == party
-            @generatePartyCloud partyTerms, party
+            (cb) ~> @generatePartyCloud partyTerms, party, cb
+        (err) <~ async.parallel tasks
+        cb? err
 
 
     generateNextCloud: ->
@@ -40,31 +44,34 @@ module.exports = class WordCloudDataConnector
         | _   => @generatePartyCloud terms, party
 
 
-    generateGlobalCloud: (terms) ->
+    generateGlobalCloud: (terms, cb) ->
         @wordCloud.generate do
             @convertToWords @config.wordCloud, terms
             @config.wordCloud
             (err, cloud) ~>
                 | err => console.error err
                 | _   => @outputCache.set cloud, null
+                cb? err
 
-    generateGlobalCloudImage: (terms) ->
+    generateGlobalCloudImage: (terms, cb) ->
         @wordCloud.generatePNGBuffer do
             @convertToWords @config.wordCloud.smallCloud, terms
             @config.wordCloud.smallCloud
             (err, buff) ~>
                 | err => console.error err
                 | _   => fs.writeFile "#__dirname/../www/img/cloud.png" buff
+                cb? err
 
 
 
-    generatePartyCloud: (terms, party) ->
+    generatePartyCloud: (terms, party, cb) ->
         @wordCloud.generate do
             @convertToWords @config.wordCloud, terms, party
             @config.wordCloud
             (err, cloud) ~>
                 | err => console.error err
                 | _   => @outputCache.set cloud, party
+                cb? err
 
 
     convertToWords: (sizes, terms, party = null) ->
