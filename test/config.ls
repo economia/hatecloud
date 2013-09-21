@@ -1,5 +1,5 @@
 module.exports =
     redis:
-        address: '192.168.123.16'
+        address: 'v.sulek.eu'
         port: 6379
         db: 1

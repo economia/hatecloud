@@ -6,30 +6,54 @@
         <title>Admin</title>
         <link rel="stylesheet" type="text/css" href="http://service.ihned.cz/js/alertify/v0.3.10.css" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
+        <link rel="stylesheet" type="text/css" href="http://service.ihned.cz/js/bootstrap/v2.3.2/css/bootstrap.min.css" />
         <script src="http://service.ihned.cz/js/jquery.min.js"></script>
         <script src="http://service.ihned.cz/js/jquery.eventEmitter.min.js"></script>
         <script src="http://service.ihned.cz/js/alertify/v0.3.10.min.js"></script>
         <script src="http://service.ihned.cz/js/jq-ui/jquery-ui.min.js"></script>
+        <script src="http://service.ihned.cz/js/bootstrap/v2.3.2/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <style></style>
+        <style>
+            .btn-success {
+                margin-right: 20px;
+            }
+        </style>
     </head>
     <body>
-        <div class="header">
+        <div class="container">
+            <h1>HateCloud administrace</h1>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#">Neschválené</a>
+                </li>
+            </ul>
+            <table class='table' id='unapproved'>
+                <thead>
+                    <tr>
+                        <th>Slovo</th>
+                        <th>Akce</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
         <script>
         var socket = io.connect();
-
+        socket.on('shouts', function(shouts) {
+            var $table = $("#unapproved");
+            shouts.forEach(function(shout) {
+                var $row = $("<tr></tr>")
+                    .data('term', shout.term)
+                    .appendTo($table);
+                var $term = $("<td></td>")
+                    .html(shout.term)
+                    .appendTo($row);
+                var $actions = $("<td></td>")
+                    .append("<button class='btn btn-success'>Schválit</button>")
+                    .append("<button class='btn btn-danger'>Zamítnout</button>")
+                    .appendTo($row);
+            })
+        })
         </script>
-        <!-- script type="text/javascript">
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-41281738-1']);
-          _gaq.push(['_trackPageview']);
-
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-        </script -->
     </body>
 </html>
