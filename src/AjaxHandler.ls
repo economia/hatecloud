@@ -7,12 +7,15 @@ module.exports = class AjaxHandler
         | \POST => @handlePostTerm ...
 
     hadleGetCloud: (req, res) ->
-        res.writeHead do
-            *   200
-            *   'Content-Type': 'application/json;charset=UTF-8'
-                'Content-Length': @outputCache.currentOutputLength
-        res.write @outputCache.currentOutput
-        res.end!
+        | @outputCache.currentOutput
+            res.writeHead do
+                *   200
+                *   'Content-Type': 'application/json;charset=UTF-8'
+                    'Content-Length': @outputCache.currentOutputLength
+            res.write @outputCache.currentOutput
+            res.end!
+        | otherwise
+            @endBadly res
 
     handlePostTerm: (req, res) ->
         query = ""
