@@ -24,7 +24,7 @@ parties =
         name: \SZ
 
 new Tooltip!watchElements!
-(data) <~ $.getJSON "./term"
+(data) <~ $.getJSON "./term.json"
 wordList = new WordList data
 control = new Control do
     data
