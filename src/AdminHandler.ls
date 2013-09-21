@@ -13,7 +13,12 @@ module.exports = class AdminHandler
 
     bindSocketEvents: (socket) ->
         socket.on \approveTerm (term) ~> @approveTerm socket, term
+        socket.on \banTerm (term) ~> @banTerm socket, term
 
     approveTerm: (socket, term) ->
         <~ @shouts.approve term
+        @sendCurrentContent socket
+
+    banTerm: (socket, term) ->
+        <~ @shouts.ban term
         @sendCurrentContent socket

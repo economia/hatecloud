@@ -62,6 +62,11 @@
                 var term = getTerm($ele);
                 socket.emit('approveTerm', term);
             })
+            $(document).on('click', '.btn.btn-danger', function() {
+                var $ele = $(this);
+                var term = getTerm($ele);
+                socket.emit('banTerm', term);
+            })
             var getTerm = function($ele) {
                 return $ele.parents('tr').data('term');
             }
