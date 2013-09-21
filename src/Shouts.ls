@@ -109,4 +109,12 @@ module.exports = class Shouts
         return cb err if err
         cb null tasks.length / 2
 
+    ban: (bannedTerm, cb) ->
+        tasks = @parties.map (party) ~>
+            (cb) ~> @redisClient.zincrby @getStorePending!, -Infinity, "#bannedTerm#{@pendingDelimiter}#party", cb
+        (err) <~ async.parallel tasks
+        cb err
+
+
+
 

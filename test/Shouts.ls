@@ -102,7 +102,7 @@ describe 'Shouts' ->
                 expect results[0].party .to.equal \ods
                 done!
 
-        describe 'Retrieve - unapproved' ->
+        describe 'Unapproved and banned shouts' ->
             test 'should retrieve unapproved shouts' (done) ->
                 (err, unapproved) <~ shouts.getUnapproved
                 expect err .to.be null
@@ -110,6 +110,13 @@ describe 'Shouts' ->
                 expect unapproved.0 .to.have.property \term \termC
                 expect unapproved.0 .to.have.property \partyId \ods
                 expect unapproved.0 .to.have.property \score 1
+                done!
+
+            test 'should ban shouts' (done) ->
+                (err, unapproved) <~ shouts.ban \termC
+                expect err .to.be null
+                (err, unapproved) <~ shouts.getUnapproved
+                expect unapproved .to.have.length 0
                 done!
 
 
