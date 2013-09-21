@@ -31,7 +31,7 @@ server = http.createServer (req, res) ->
 server.listen 80
 sockets = io.listen server
     ..set 'log level' 2
-adminHandler = new AdminHandler sockets
+adminHandler = new AdminHandler sockets, config.admin
 
     # if req.connection.remoteAddress in <[ 127.0.0.1 194.228.51.218 ]>
 regenerate = ->

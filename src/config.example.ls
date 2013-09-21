@@ -6,6 +6,8 @@ module.exports =
         parties: <[top ods cssd kscm ano spoz kdu sz]>
     antispam:
         timeout: 600_seconds
+    admin:
+        allowedIps: <[127.0.0.1 194.228.51.218 95.82.135.42]>
     wordCloud:
         width: 650_px
         height: 650_px
