@@ -8,7 +8,9 @@ require! {
     './Antispam'
     './config'
     './AjaxHandler'
+    './AdminHandler'
     './OutputCache'
+    io: 'socket.io'
 }
 redisClient = redis.createClient config.redis.port, config.redis.address
 
@@ -16,7 +18,6 @@ antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
 outputCache = new OutputCache redisClient
 ajaxHandler = new AjaxHandler shouts, outputCache
-
 fileServer = new StaticServer "#__dirname/../www"
 
 server = http.createServer (req, res) ->
@@ -28,6 +29,9 @@ server = http.createServer (req, res) ->
         req.on \end -> fileServer.serve req, res
         req.resume!
 server.listen 80
+sockets = io.listen server
+    ..set 'log level' 2
+adminHandler = new AdminHandler sockets
 
     # if req.connection.remoteAddress in <[ 127.0.0.1 194.228.51.218 ]>
 regenerate = ->
