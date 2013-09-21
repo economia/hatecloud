@@ -35,6 +35,7 @@ regenerate = ->
     console.error err if err
     outputCache.refresh!
 
+outputCache.refresh!
 regenerate!
 if config.wordCloud.interval
     setInterval regenerate, that
