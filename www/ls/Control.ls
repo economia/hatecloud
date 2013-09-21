@@ -15,8 +15,8 @@ window.Control = class Control
             continue if _party is \all
             let party = _party
                 item = $ "<li></li>"
-                    ..append "<img src='img/loga/#{party}-on.png' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
-                    ..append "<img src='img/loga/#{party}-off.png' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
+                    ..append "<img src='img/loga/#{party}-on.png' width='72' height='56' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
+                    ..append "<img src='img/loga/#{party}-off.png' width='72' height='56' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
                     ..append @parties[party].name
                     ..append "<div class='arrow'></div>"
                     ..appendTo @$selector
