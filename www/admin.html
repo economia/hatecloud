@@ -38,22 +38,25 @@
             </table>
         </div>
         <script>
-        var socket = io.connect();
-        socket.on('shouts', function(shouts) {
-            var $table = $("#unapproved");
-            shouts.forEach(function(shout) {
-                var $row = $("<tr></tr>")
-                    .data('term', shout.term)
-                    .appendTo($table);
-                var $term = $("<td></td>")
-                    .html(shout.term)
-                    .appendTo($row);
-                var $actions = $("<td></td>")
-                    .append("<button class='btn btn-success'>Schválit</button>")
-                    .append("<button class='btn btn-danger'>Zamítnout</button>")
-                    .appendTo($row);
+        (function() {
+            "use strict"
+            var socket = io.connect();
+            socket.on('shouts', function(shouts) {
+                var $table = $("#unapproved");
+                shouts.forEach(function(shout) {
+                    var $row = $("<tr></tr>")
+                        .data('term', shout.term)
+                        .appendTo($table);
+                    var $term = $("<td></td>")
+                        .html(shout.term)
+                        .appendTo($row);
+                    var $actions = $("<td></td>")
+                        .append("<button class='btn btn-success'>Schválit</button>")
+                        .append("<button class='btn btn-danger'>Zamítnout</button>")
+                        .appendTo($row);
+                })
             })
-        })
+        }())
         </script>
     </body>
 </html>
