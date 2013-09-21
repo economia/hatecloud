@@ -5,7 +5,15 @@ module.exports = class AdminHandler
                 return socket.disconnect('unauthorized');
             console.log "Admin connected"
             @sendCurrentContent socket
+            @bindSocketEvents socket
 
     sendCurrentContent: (socket) ->
         (err, content) <~ @shouts.getUnapproved
         socket.emit \shouts content
+
+    bindSocketEvents: (socket) ->
+        socket.on \approveTerm (term) ~> @approveTerm socket, term
+
+    approveTerm: (socket, term) ->
+        <~ @shouts.approve term
+        @sendCurrentContent socket

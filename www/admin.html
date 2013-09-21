@@ -43,6 +43,7 @@
             var socket = io.connect();
             socket.on('shouts', function(shouts) {
                 var $table = $("#unapproved");
+                $table.find("tbody").empty();
                 shouts.forEach(function(shout) {
                     var $row = $("<tr></tr>")
                         .data('term', shout.term)
@@ -56,6 +57,14 @@
                         .appendTo($row);
                 })
             })
+            $(document).on('click', '.btn.btn-success', function() {
+                var $ele = $(this);
+                var term = getTerm($ele);
+                socket.emit('approveTerm', term);
+            })
+            var getTerm = function($ele) {
+                return $ele.parents('tr').data('term');
+            }
         }())
         </script>
     </body>
