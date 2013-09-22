@@ -16,16 +16,16 @@ module.exports = class AdminHandler
         socket.emit \all content
 
     bindSocketEvents: (socket) ->
-        socket.on \approveTerm (term) ~> @approveTerm socket, term
-        socket.on \banTerm (term) ~> @banTerm socket, term
+        socket.on \approveTerm (data) ~> @approveTerm socket, data
+        socket.on \banTerm (data) ~> @banTerm socket, data
         socket.on \request (subject) ~> @fullfillRequest socket, subject
 
-    approveTerm: (socket, term) ->
-        <~ @shouts.approve term
+    approveTerm: (socket, {term, party}) ->
+        <~ @shouts.approve term, party
         @sendUnapproved socket
 
-    banTerm: (socket, term) ->
-        <~ @shouts.ban term
+    banTerm: (socket, {term, party}) ->
+        <~ @shouts.ban term, party
         @sendUnapproved socket
 
     fullfillRequest: (socket, subject) ->

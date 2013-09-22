@@ -38,6 +38,7 @@
                     <thead>
                         <tr>
                             <th>Slovo</th>
+                            <th>Strana</th>
                             <th>Akce</th>
                         </tr>
                     </thead>
@@ -68,9 +69,13 @@
                 shouts.forEach(function(shout) {
                     var $row = $("<tr></tr>")
                         .data('term', shout.term)
+                        .data('party', shout.partyId)
                         .appendTo($table);
                     var $term = $("<td></td>")
                         .html(shout.term)
+                        .appendTo($row);
+                    var $party = $("<td></td>")
+                        .html(shout.partyId)
                         .appendTo($row);
                     var $actions = $("<td></td>")
                         .append("<button class='btn btn-success'>Schválit</button>")
@@ -99,16 +104,18 @@
             })
             $(document).on('click', '.btn.btn-success', function() {
                 var $ele = $(this);
-                var term = getTerm($ele);
-                socket.emit('approveTerm', term);
+                var termData = getTermData($ele);
+                socket.emit('approveTerm', termData);
             })
             $(document).on('click', '.btn.btn-danger', function() {
                 var $ele = $(this);
-                var term = getTerm($ele);
-                socket.emit('banTerm', term);
+                var termData = getTermData($ele);
+                socket.emit('banTerm', termData);
             })
-            var getTerm = function($ele) {
-                return $ele.parents('tr').data('term');
+            var getTermData = function($ele) {
+                var term = $ele.parents('tr').data('term');
+                var party = $ele.parents('tr').data('party');
+                return {term: term, party: party}
             }
             var setDisplay = function(name) {
                 $(".content").addClass("hidden");
