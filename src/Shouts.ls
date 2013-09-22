@@ -20,8 +20,6 @@ module.exports = class Shouts
         output .= sort (a, b) -> b.score - a.score
         cb null output
 
-
-
     get: (partyId, cb) ->
         store = @getStoreParty partyId
         @getFromStore store, cb
@@ -59,7 +57,6 @@ module.exports = class Shouts
         | yes => @saveApproved term, partyId, 1, cb
         | no  => @savePending term, partyId, cb
 
-
     saveApproved: (term, partyId, score, cb) ->
         storeAll = @getStoreAll!
         storeParty = @getStoreParty partyId
@@ -74,7 +71,6 @@ module.exports = class Shouts
         (err) <~ @redisClient.zincrby @getStorePending!, 1, key
         return cb err if err
         cb null \pending
-
 
     isApproved: (term, cb) ->
         (err, result) <~ @redisClient.zscore @getStoreAll!, term
@@ -96,7 +92,6 @@ module.exports = class Shouts
             score = parseInt allUnapproved[i + 1], 10
             {term, partyId, score, record}
         cb null list
-
 
     approve: (approvedTerm, cb) ->
         (err, allUnapproved) <~ @getUnapproved
