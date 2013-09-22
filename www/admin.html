@@ -29,6 +29,9 @@
                 <li id='sel-unapproved'>
                     <a href="#">Neschválené</a>
                 </li>
+                <li id='sel-all'>
+                    <a href="#">Všechny</a>
+                </li>
             </ul>
             <div class="content" id='unapproved'>
                 <table class='table'>
@@ -41,12 +44,24 @@
                     <tbody></tbody>
                 </table>
             </div>
+            <div class="content" id='all'>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th>Slovo</th>
+                            <th>Strana</th>
+                            <th>Počet bodů</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <script>
         (function() {
             "use strict"
             var socket = io.connect();
-            socket.on('shouts', function(shouts) {
+            socket.on('unapproved', function(shouts) {
                 setDisplay("unapproved");
                 var $table = $("#unapproved table");
                 $table.find("tbody").empty();
@@ -60,6 +75,25 @@
                     var $actions = $("<td></td>")
                         .append("<button class='btn btn-success'>Schválit</button>")
                         .append("<button class='btn btn-danger'>Zamítnout</button>")
+                        .appendTo($row);
+                })
+            })
+            socket.on('all', function(shouts) {
+                setDisplay("all");
+                var $table = $("#all table");
+                $table.find("tbody").empty();
+                shouts.forEach(function(shout) {
+                    var $row = $("<tr></tr>")
+                        .data('term', shout.term)
+                        .appendTo($table);
+                    var $term = $("<td></td>")
+                        .html(shout.term)
+                        .appendTo($row);
+                    var $party = $("<td></td>")
+                        .append(shout.party)
+                        .appendTo($row);
+                    var $score = $("<td></td>")
+                        .append(shout.score)
                         .appendTo($row);
                 })
             })
@@ -78,10 +112,16 @@
             }
             var setDisplay = function(name) {
                 $(".content").addClass("hidden");
-                $("nav.active").removeClass("active");
+                $(".nav .active").removeClass("active");
                 $("#" + name).removeClass("hidden");
                 $("#sel-" + name).addClass("active");
             }
+            $('#sel-unapproved').on('click', function() {
+                socket.emit("request", "unapproved");
+            })
+            $('#sel-all').on('click', function() {
+                socket.emit("request", "all");
+            })
         }())
         </script>
     </body>
