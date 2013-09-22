@@ -123,7 +123,7 @@ describe 'Shouts' ->
                 done!
 
             test 'should ban shouts' (done) ->
-                (err, unapproved) <~ shouts.ban \termC
+                (err, unapproved) <~ shouts.ban \termC \ods
                 expect err .to.be null
                 (err, unapproved) <~ shouts.getUnapproved
                 expect unapproved .to.have.length 0

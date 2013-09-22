@@ -94,7 +94,7 @@ module.exports = class Shouts
         cb null list
 
     approve: (term, partyId, cb) ->
-        record = "#term#{@pendingDelimiter}#partyId"
+        record = @getRecordString term, partyId
         (err, score) <~ @redisClient.zscore @getStorePending!, record
         return cb err if err
         return cb null 0 if score is null
@@ -104,12 +104,10 @@ module.exports = class Shouts
         return cb err if err
         cb null 1
 
-    ban: (bannedTerm, cb) ->
-        tasks = @parties.map (party) ~>
-            (cb) ~> @redisClient.zincrby @getStorePending!, -Infinity, "#bannedTerm#{@pendingDelimiter}#party", cb
-        (err) <~ async.parallel tasks
+    ban: (term, partyId, cb) ->
+        record = @getRecordString term, partyId
+        (err) <~ @redisClient.zincrby @getStorePending!, -Infinity, record
         cb err
 
-
-
-
+    getRecordString: (term, partyId) ->
+        "#term#{@pendingDelimiter}#partyId"
