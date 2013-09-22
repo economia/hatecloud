@@ -17,32 +17,38 @@
             .btn-success {
                 margin-right: 20px;
             }
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <h1>HateCloud administrace</h1>
             <ul class="nav nav-tabs">
-                <li class="active">
+                <li id='sel-unapproved'>
                     <a href="#">Neschválené</a>
                 </li>
             </ul>
-            <table class='table' id='unapproved'>
-                <thead>
-                    <tr>
-                        <th>Slovo</th>
-                        <th>Akce</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="content" id='unapproved'>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th>Slovo</th>
+                            <th>Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <script>
         (function() {
             "use strict"
             var socket = io.connect();
             socket.on('shouts', function(shouts) {
-                var $table = $("#unapproved");
+                setDisplay("unapproved");
+                var $table = $("#unapproved table");
                 $table.find("tbody").empty();
                 shouts.forEach(function(shout) {
                     var $row = $("<tr></tr>")
@@ -69,6 +75,12 @@
             })
             var getTerm = function($ele) {
                 return $ele.parents('tr').data('term');
+            }
+            var setDisplay = function(name) {
+                $(".content").addClass("hidden");
+                $("nav.active").removeClass("active");
+                $("#" + name).removeClass("hidden");
+                $("#sel-" + name).addClass("active");
             }
         }())
         </script>
