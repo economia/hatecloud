@@ -93,16 +93,16 @@ module.exports = class Shouts
             {term, partyId, score, record}
         cb null list
 
-    approve: (approvedTerm, cb) ->
-        (err, allUnapproved) <~ @getUnapproved
-        termUnapproved = allUnapproved.filter -> it.term is approvedTerm
-        tasks = []
-        termUnapproved.forEach ({term, partyId, score, record}) ~>
-            tasks.push ~> @saveApproved term, partyId, score, it
-            tasks.push ~> @redisClient.zrem @getStorePending!, record, it
-        (err) <~ async.parallel tasks
+    approve: (term, partyId, cb) ->
+        record = "#term#{@pendingDelimiter}#partyId"
+        (err, score) <~ @redisClient.zscore @getStorePending!, record
         return cb err if err
-        cb null tasks.length / 2
+        return cb null 0 if score is null
+        (err) <~ async.parallel do
+            *   ~> @saveApproved term, partyId, score, it
+                ~> @redisClient.zrem @getStorePending!, record, it
+        return cb err if err
+        cb null 1
 
     ban: (bannedTerm, cb) ->
         tasks = @parties.map (party) ~>

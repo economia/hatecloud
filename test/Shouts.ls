@@ -47,7 +47,17 @@ describe 'Shouts' ->
         describe 'Approve' ->
             approvalResults = null
             test 'should approve selected terms' (done) ->
-                (err, results) <~ async.mapSeries <[termA termA termB termD termE]>, shouts~approve
+                termArray =
+                    <[termA ods]>
+                    <[termA ods]>
+                    <[termA cssd]>
+                    <[termA top]>
+                    <[termB ods]>
+                    <[termD cssd]>
+                    <[termE top]>
+                (err, results) <~ async.mapSeries do
+                    termArray
+                    ([term, party], cb)-> shouts.approve term, party, cb
                 expect err .to.be null
                 approvalResults := results
                 done!
