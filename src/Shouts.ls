@@ -52,7 +52,7 @@ module.exports = class Shouts
 
     saveOne: (term, partyId, cb) ->
         standardizedTerm = @standardizeTerm term
-        (err, fullTerm) <~ @getFullTerm term
+        (err, fullTerm) <~ @getFullTerm standardizedTerm
         if fullTerm then term := that
         (err, termApproved) <~ @isApproved term, partyId
         return cb err if err

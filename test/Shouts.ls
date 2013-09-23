@@ -145,11 +145,11 @@ describe 'Shouts' ->
     describe 'Case insensitivity' ->
         test 'all terms should be case insensitive' (done) ->
             antispamResult := yes
-            (err, result) <~ shouts.save \127.0.0.2 \terma \termb \ods
+            (err, result) <~ shouts.save \127.0.0.2 \terma \tErMa \TERMA \ods
             expect err .to.be null
             (err, result) <~ shouts.get \ods
-            expect result.0 .to.have.property \term \termB
-            expect result.0 .to.have.property \score 3
-            expect result.1 .to.have.property \term \termA
+            expect result.0 .to.have.property \term \termA
+            expect result.0 .to.have.property \score 4
+            expect result.1 .to.have.property \term \termB
             expect result.1 .to.have.property \score 2
             done!
