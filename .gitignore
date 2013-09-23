@@ -1,6 +1,7 @@
 /node_modules
 /lib
 /www/screen.css
+/www/*.gz
 /www/js/*
 /src/config.ls
 /www/script.js

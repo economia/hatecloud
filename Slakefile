@@ -4,7 +4,7 @@ option 'testFile' 'File in (/lib or /test) to run test on' 'FILE'
 option 'currentfile' 'Latest file that triggered the save' 'FILE'
 
 deferScripts = [ 'base.js' ]
-
+gzippable = <[admin.html index.html screen.css script.js]>
 build-styles = (options = {}) ->
     require! stylus
     (err, data) <~ fs.readFile "#__dirname/www/styl/screen.styl"
@@ -29,7 +29,7 @@ build-all-scripts = (cb) ->
     throw err if err
     cb?!
 
-combine-scripts = (options = {}) ->
+combine-scripts = (options = {}, cb) ->
     require! uglify: "uglify-js"
     (err, files) <~ fs.readdir "#__dirname/www/js"
     files .= filter -> it isnt 'script.js' and it isnt 'script.js.map'
@@ -51,7 +51,8 @@ combine-scripts = (options = {}) ->
     if not options.compression
         code += "\n//@ sourceMappingURL=./js/script.js.map"
         fs.writeFile "#__dirname/www/js/script.js.map", map
-    fs.writeFile "#__dirname/www/script.js", code
+    (err) <~ fs.writeFile "#__dirname/www/script.js", code
+    cb err
 
 run-script = (file) ->
     require! child_process.exec
@@ -77,7 +78,21 @@ relativizeFilename = (file) ->
         '/'
     file .= substr 1
 
+gzip-files = (cb) ->
+    require! async
+    (err) <~ async.map gzippable, gzip-file
+    cb err
 
+gzip-file = (file, cb) ->
+    require! zlib
+    gzip = zlib.createGzip!
+    address        = "#__dirname/www/#file"
+    gzippedAddress = "#__dirname/www/#file.gz"
+    input  = fs.createReadStream address
+    output = fs.createWriteStream gzippedAddress
+    input.pipe gzip .pipe output
+
+    cb!
 
 task \build ->
     build-styles compression: no
@@ -86,7 +101,8 @@ task \build ->
 task \deploy ->
     build-styles compression: yes
     <~ build-all-scripts
-    combine-scripts compression: yes
+    <~ combine-scripts compression: yes
+    <~ gzip-files!
 task \build-styles ->
     build-styles compression: no
 task \build-script ({currentfile}) ->
