@@ -19,13 +19,13 @@ build-styles = (options = {}) ->
 
 build-script = (file, cb) ->
     require! child_process.exec
-    (err, result) <~ exec "lsc.cmd -o #__dirname/www/js -c #__dirname/#file"
+    (err, result) <~ exec "lsc -o #__dirname/www/js -c #__dirname/#file"
     throw err if err
     cb?!
 
 build-all-scripts = (cb) ->
     require! child_process.exec
-    (err, result) <~ exec "lsc.cmd -o #__dirname/www/js -c #__dirname/www/ls"
+    (err, result) <~ exec "lsc -o #__dirname/www/js -c #__dirname/www/ls"
     throw err if err
     cb?!
 
