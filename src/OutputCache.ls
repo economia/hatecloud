@@ -35,5 +35,5 @@ module.exports = class OutputCache
     refreshImage: (cb) ->
         (err, buf) <~ fs.readFile "#__dirname/../www/img/cloud.png"
         return cb null if err
-        @setImage buf
+        @setImage buf if buf
         cb!
