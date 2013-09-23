@@ -6,6 +6,7 @@ module.exports = class AdminHandler
             console.log "Admin connected"
             @sendUnapproved socket
             @bindSocketEvents socket
+        shouts.on \newUnapproved @~emitNewUnapproved
 
     sendUnapproved: (socket) ->
         (err, content) <~ @shouts.getUnapproved
@@ -32,3 +33,6 @@ module.exports = class AdminHandler
         switch subject
         | \unapproved => @sendUnapproved socket
         | \all => @sendAll socket
+
+    emitNewUnapproved: (term, partyId) ->
+        @sockets.emit \newUnapproved {term, partyId}

@@ -67,20 +67,7 @@
                 var $table = $("#unapproved table");
                 $table.find("tbody").empty();
                 shouts.forEach(function(shout) {
-                    var $row = $("<tr></tr>")
-                        .data('term', shout.term)
-                        .data('party', shout.partyId)
-                        .appendTo($table);
-                    var $term = $("<td></td>")
-                        .html(shout.term)
-                        .appendTo($row);
-                    var $party = $("<td></td>")
-                        .html(shout.partyId)
-                        .appendTo($row);
-                    var $actions = $("<td></td>")
-                        .append("<button class='btn btn-success'>Schválit</button>")
-                        .append("<button class='btn btn-danger'>Zamítnout</button>")
-                        .appendTo($row);
+                    addShoutToTable(shout, $table);
                 })
             })
             socket.on('all', function(shouts) {
@@ -102,6 +89,10 @@
                         .appendTo($row);
                 })
             })
+            socket.on('newUnapproved', function(shout) {
+                var $table = $("#unapproved table");
+                addShoutToTable(shout, $table);
+            })
             $(document).on('click', '.btn.btn-success', function() {
                 var $ele = $(this);
                 var termData = getTermData($ele);
@@ -122,6 +113,22 @@
                 $(".nav .active").removeClass("active");
                 $("#" + name).removeClass("hidden");
                 $("#sel-" + name).addClass("active");
+            }
+            var addShoutToTable = function(shout, $table) {
+                var $row = $("<tr></tr>")
+                    .data('term', shout.term)
+                    .data('party', shout.partyId)
+                    .appendTo($table);
+                var $term = $("<td></td>")
+                    .html(shout.term)
+                    .appendTo($row);
+                var $party = $("<td></td>")
+                    .html(shout.partyId)
+                    .appendTo($row);
+                var $actions = $("<td></td>")
+                    .append("<button class='btn btn-success'>Schválit</button>")
+                    .append("<button class='btn btn-danger'>Zamítnout</button>")
+                    .appendTo($row);
             }
             $('#sel-unapproved').on('click', function() {
                 socket.emit("request", "unapproved");
