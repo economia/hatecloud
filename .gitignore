@@ -3,6 +3,7 @@
 /www/screen.css
 /www/*.gz
 /www/js/*
+/www/js_external/*
 /src/config.ls
 /www/script.js
 /www/img/cloud.png

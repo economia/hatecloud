@@ -3,6 +3,14 @@ require! fs
 option 'testFile' 'File in (/lib or /test) to run test on' 'FILE'
 option 'currentfile' 'Latest file that triggered the save' 'FILE'
 
+externalScripts =
+    \http://service.ihned.cz/js/modernizr/v2.6.2.svg.min.js
+    \http://service.ihned.cz/js/jquery.min.js
+    \http://service.ihned.cz/js/cookies.min.js
+    \http://service.ihned.cz/js/jquery.eventEmitter.min.js
+    \http://service.ihned.cz/js/alertify/v0.3.10.min.js
+    \http://service.ihned.cz/js/jq-ui/jquery-ui.min.js
+
 deferScripts = [ 'base.js' ]
 gzippable = <[admin.html index.html screen.css script.js]>
 build-styles = (options = {}) ->
@@ -29,8 +37,29 @@ build-all-scripts = (cb) ->
     throw err if err
     cb?!
 
+download-external-scripts = (cb) ->
+    require! request
+    require! async
+    normalizedNames =  externalScripts.map getSafeFilename
+    (err) <~ fs.mkdir "#__dirname/www/js_external"
+    (err, responses) <~ async.map externalScripts, request~get
+    tasks = responses.map (response, index) ->
+        filename = normalizedNames[index]
+        (cb) -> fs.writeFile "#__dirname/www/js_external/#filename" response.body
+    async.parallel tasks
+    cb!
+
+getSafeFilename = (name) ->
+    name
+        .replace /^(.*?):\/\// ''
+        .replace /[^-\.a-z0-9]/ig '-'
+        .replace /[-]{2,}/ '-'
+
 combine-scripts = (options = {}, cb) ->
     require! uglify: "uglify-js"
+    externalFiles = externalScripts.map ->
+        name = getSafeFilename it
+        "#__dirname/www/js_external/#name"
     (err, files) <~ fs.readdir "#__dirname/www/js"
     files .= filter -> it isnt 'script.js' and it isnt 'script.js.map'
     files .= sort (a, b) ->
@@ -45,7 +74,9 @@ combine-scripts = (options = {}, cb) ->
             ..mangle       = no
             ..outSourceMap = "../js/script.js.map"
             ..sourceRoot   = "../../"
-    result = uglify.minify files, minifyOptions
+    result = uglify.minify do
+        externalFiles ++ files
+        minifyOptions
 
     {map, code} = result
     if not options.compression
@@ -97,10 +128,12 @@ gzip-file = (file, cb) ->
 task \build ->
     build-styles compression: no
     <~ build-all-scripts
+    <~ download-external-scripts
     combine-scripts compression: no
 task \deploy ->
     build-styles compression: yes
     <~ build-all-scripts
+    <~ download-external-scripts
     <~ combine-scripts compression: yes
     <~ gzip-files!
 task \build-styles ->
