@@ -18,7 +18,9 @@ antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
 outputCache = new OutputCache redisClient
 ajaxHandler = new AjaxHandler shouts, outputCache
-fileServer = new StaticServer "#__dirname/../www"
+fileServer = new StaticServer do
+    *   "#__dirname/../www"
+    *   gzip: yes
 
 server = http.createServer (req, res) ->
     url = req.url.split '/'
