@@ -52,7 +52,7 @@ combine-scripts = (options = {}, cb) ->
         code += "\n//@ sourceMappingURL=./js/script.js.map"
         fs.writeFile "#__dirname/www/js/script.js.map", map
     (err) <~ fs.writeFile "#__dirname/www/script.js", code
-    cb err
+    cb? err
 
 run-script = (file) ->
     require! child_process.exec
