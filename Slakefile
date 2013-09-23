@@ -16,7 +16,7 @@ externalStyles =
     \http://service.ihned.cz/js/jq-ui/theme/theme.min.css
 
 deferScripts = [ 'base.js' ]
-gzippable = <[admin.html index.html screen.css script.js external.js]>
+gzippable = <[admin.html index.html screen.css script.js]>
 build-styles = (options = {}) ->
     require! async
     (err, [external, local]) <~ async.parallel do
@@ -89,12 +89,16 @@ combine-scripts = (options = {}, cb) ->
             ..mangle       = no
             ..outSourceMap = "../js/script.js.map"
             ..sourceRoot   = "../../"
+        files.unshift "./www/js/_loadExternal.js"
     result = uglify.minify files, minifyOptions
 
     {map, code} = result
     if not options.compression
         code += "\n//@ sourceMappingURL=./js/script.js.map"
         fs.writeFile "#__dirname/www/js/script.js.map", map
+    else
+        external = fs.readFileSync "#__dirname/www/external.js"
+        code = external + code
     (err) <~ fs.writeFile "#__dirname/www/script.js", code
     console.log "Scripts combined"
     cb? err

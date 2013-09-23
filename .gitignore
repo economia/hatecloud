@@ -5,6 +5,7 @@
 /www/external.js
 /www/*.gz
 /www/js/*
+!/www/js/_loadExternal.js
 /src/config.ls
 /www/script.js
 /www/img/cloud.png
