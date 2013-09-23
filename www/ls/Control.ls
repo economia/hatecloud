@@ -15,6 +15,7 @@ window.Control = class Control
             continue if _party is \all
             let party = _party
                 item = $ "<li></li>"
+                    ..addClass "sel-#party"
                     ..append "<img src='img/loga/#{party}-on.png' width='72' height='56' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
                     ..append "<img src='img/loga/#{party}-off.png' width='72' height='56' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
                     ..append @parties[party].name
@@ -78,6 +79,7 @@ window.Control = class Control
             else
                 $ element .data \party
             return if not @parties[party]
+            $ "li.sel-#party" .addClass \active
             @drawParty party
             @onTermClicked term
         | otherwise
