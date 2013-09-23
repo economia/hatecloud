@@ -51,15 +51,31 @@ module.exports = class Shouts
         cb err, result
 
     saveOne: (term, partyId, cb) ->
+        standardizedTerm = @standardizeTerm term
+        (err, fullTerm) <~ @getFullTerm term
+        if fullTerm then term := that
         (err, termApproved) <~ @isApproved term
         return cb err if err
         switch termApproved
         | yes => @saveApproved term, partyId, 1, cb
         | no  => @savePending term, partyId, cb
 
+    getFullTerm: (standardizedTerm, cb) ->
+        (err, term) <~ @redisClient.hget \synonyms standardizedTerm
+        cb null term
+
+    saveStandardizedTerm: (term, cb) ->
+        standardizedTerm = @standardizeTerm term
+        (err) <~ @redisClient.hset \synonyms standardizedTerm, term
+        cb? err, standardizedTerm
+
+    standardizeTerm: (term) ->
+        term.toLowerCase!
+
     saveApproved: (term, partyId, score, cb) ->
         storeAll = @getStoreAll!
         storeParty = @getStoreParty partyId
+        @saveStandardizedTerm term
         (err) <~ async.parallel do
             *   (cb) ~> @redisClient.zincrby storeAll, score, term, cb
                 (cb) ~> @redisClient.zincrby storeParty, score, term, cb
@@ -94,6 +110,7 @@ module.exports = class Shouts
         cb null list
 
     approve: (term, partyId, cb) ->
+        @saveStandardizedTerm term
         record = @getRecordString term, partyId
         (err, score) <~ @redisClient.zscore @getStorePending!, record
         return cb err if err
