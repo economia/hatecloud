@@ -71,17 +71,25 @@ window.Control = class Control
                 @voteWatch.registerVote party
 
 
-    onTermClicked: (term = null) ->
-        return if @curentPartyId is \all
-        switch @voteWatch.didVote @curentPartyId
-        | yes => alertify.error "Pro tuto stranu jste již hlasoval"
-        | no  => if term then @form.addTerm term else @form.display!
+    onTermClicked: (term = null, element) ->
+        | @curentPartyId is \all
+            party = if Modernizr.svg
+                element.getAttribute 'class'
+            else
+                $ element .data \party
+            return if not @parties[party]
+            @drawParty party
+            @onTermClicked term
+        | otherwise
+            switch @voteWatch.didVote @curentPartyId
+            | yes => alertify.error "Pro tuto stranu jste již hlasoval"
+            | no  => if term then @form.addTerm term else @form.display!
 
     registerClickHandlers: ->
         $ document .on 'click touchstart' '.wordCloud .subcontainer text' (evt) ~>
-            @onTermClicked evt.currentTarget.textContent
+            @onTermClicked evt.currentTarget.textContent, evt.currentTarget
         $ document .on 'click touchstart' '.wordCloud .subcontainer span' (evt) ~>
-            @onTermClicked evt.currentTarget.innerHTML
+            @onTermClicked evt.currentTarget.innerHTML, evt.currentTarget
 
     drawHelpButton: ->
         $ "<div></div>"
