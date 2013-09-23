@@ -1,6 +1,7 @@
 /node_modules
 /lib
 /www/screen.css
+/www/external.css
 /www/*.gz
 /www/js/*
 /www/js_external/*

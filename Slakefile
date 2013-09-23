@@ -11,9 +11,21 @@ externalScripts =
     \http://service.ihned.cz/js/alertify/v0.3.10.min.js
     \http://service.ihned.cz/js/jq-ui/jquery-ui.min.js
 
+externalStyles =
+    \http://service.ihned.cz/js/alertify/v0.3.10.css
+    \http://service.ihned.cz/js/jq-ui/theme/theme.min.css
+
 deferScripts = [ 'base.js' ]
 gzippable = <[admin.html index.html screen.css script.js]>
 build-styles = (options = {}) ->
+    require! async
+    (err, [external, local]) <~ async.parallel do
+        *   (cb) -> fs.readFile "#__dirname/www/external.css", cb
+            (cb) -> prepare-stylus options, cb
+    fs.writeFile "#__dirname/www/screen.css", external + "\n\n\n" + local
+
+prepare-stylus = (options, cb) ->
+    console.log "Building Stylus"
     require! stylus
     (err, data) <~ fs.readFile "#__dirname/www/styl/screen.styl"
     data .= toString!
@@ -23,7 +35,8 @@ build-styles = (options = {}) ->
         stylusCompiler.set \compress true
     (err, css) <~ stylusCompiler.render
     throw err if err
-    fs.writeFile "#__dirname/www/screen.css", css
+    console.log "Stylus built"
+    cb null css
 
 build-script = (file, cb) ->
     require! child_process.exec
@@ -32,12 +45,15 @@ build-script = (file, cb) ->
     cb?!
 
 build-all-scripts = (cb) ->
+    console.log "Building scripts..."
     require! child_process.exec
     (err, result) <~ exec "lsc -o #__dirname/www/js -c #__dirname/www/ls"
     throw err if err
+    console.log "Scripts build"
     cb?!
 
 download-external-scripts = (cb) ->
+    console.log "Dowloading scripts..."
     require! request
     require! async
     normalizedNames =  externalScripts.map getSafeFilename
@@ -47,6 +63,17 @@ download-external-scripts = (cb) ->
         filename = normalizedNames[index]
         (cb) -> fs.writeFile "#__dirname/www/js_external/#filename" response.body
     async.parallel tasks
+    console.log "Scripts loaded"
+    cb!
+
+download-external-styles = (cb) ->
+    console.log "Downloading styles"
+    require! request
+    require! async
+    (err, responses) <~ async.map externalStyles, request~get
+    contents = responses.map (.body)
+    <~ fs.writeFile "#__dirname/www/external.css" contents.join "\n\n"
+    console.log "Styles loaded"
     cb!
 
 getSafeFilename = (name) ->
@@ -56,6 +83,7 @@ getSafeFilename = (name) ->
         .replace /[-]{2,}/ '-'
 
 combine-scripts = (options = {}, cb) ->
+    console.log "Combining scripts..."
     require! uglify: "uglify-js"
     externalFiles = externalScripts.map ->
         name = getSafeFilename it
@@ -83,6 +111,7 @@ combine-scripts = (options = {}, cb) ->
         code += "\n//@ sourceMappingURL=./js/script.js.map"
         fs.writeFile "#__dirname/www/js/script.js.map", map
     (err) <~ fs.writeFile "#__dirname/www/script.js", code
+    console.log "Scripts combined"
     cb? err
 
 run-script = (file) ->
@@ -126,11 +155,13 @@ gzip-file = (file, cb) ->
     cb!
 
 task \build ->
+    <~ download-external-styles
     build-styles compression: no
     <~ build-all-scripts
     <~ download-external-scripts
     combine-scripts compression: no
 task \deploy ->
+    <~ download-external-styles
     build-styles compression: yes
     <~ build-all-scripts
     <~ download-external-scripts
