@@ -78,9 +78,9 @@ window.Control = class Control
         | no  => if term then @form.addTerm term else @form.display!
 
     registerClickHandlers: ->
-        $ document .on \click '.wordCloud text' (evt) ~>
+        $ document .on \click '.wordCloud .subcontainer text' (evt) ~>
             @onTermClicked evt.currentTarget.textContent
-        $ document .on \click '.wordCloud span' (evt) ~>
+        $ document .on \click '.wordCloud .subcontainer span' (evt) ~>
             @onTermClicked evt.currentTarget.innerHTML
 
     drawHelpButton: ->
