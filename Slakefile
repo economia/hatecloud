@@ -76,7 +76,7 @@ combine-scripts = (options = {}, cb) ->
     console.log "Combining scripts..."
     require! uglify: "uglify-js"
     (err, files) <~ fs.readdir "#__dirname/www/js"
-    files .= filter -> it isnt 'script.js' and it isnt 'script.js.map'
+    files .= filter -> it isnt '_loadExternal.js' and it isnt 'script.js.map'
     files .= sort (a, b) ->
         indexA = deferScripts.indexOf a
         indexB = deferScripts.indexOf b
