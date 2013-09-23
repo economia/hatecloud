@@ -1,5 +1,8 @@
-require! async
-module.exports = class Shouts
+require! {
+    async
+    events.EventEmitter
+}
+module.exports = class Shouts extends EventEmitter
     getStoreAll: -> "shouts:_all"
     getStoreParty: -> "shouts:#it"
     getStorePending: -> "shouts:_pending"
@@ -84,7 +87,9 @@ module.exports = class Shouts
 
     savePending: (term, partyId, cb) ->
         key = "#term#{@pendingDelimiter}#partyId"
-        (err) <~ @redisClient.zincrby @getStorePending!, 1, key
+        (err, +newScore) <~ @redisClient.zincrby @getStorePending!, 1, key
+        if newScore == 1
+            @emit \newUnapproved term, partyId
         return cb err if err
         cb null \pending
 

@@ -22,6 +22,8 @@ describe 'Shouts' ->
             @requests.push {ip, partyId}
             cb null antispamResult
     shouts = new Shouts redisClient, antispamMock, <[ods cssd top]>
+    unapprovedShouts = []
+    shouts.on \newUnapproved (term, partyId) -> unapprovedShouts.push {term, partyId}
     data = [
         <[termA termB termC ods]>
         <[termB ods]>
@@ -66,6 +68,11 @@ describe 'Shouts' ->
             test 'should approve some terms in all other cases' ->
                 approvalResults.forEach (result, index) ->
                     expect result .to.be.greaterThan 0 if index != 1
+
+            test 'should have emitted an event for every unapproved shout' ->
+                expect unapprovedShouts .to.have.length 7
+                expect unapprovedShouts.0 .to.have.property \term \termA
+                expect unapprovedShouts.0 .to.have.property \partyId \ods
 
         describe 'Create after Approval' ->
             test 'should return "ok" return code' ->
