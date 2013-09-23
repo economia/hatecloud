@@ -49,7 +49,7 @@ build-all-scripts = (cb) ->
     require! child_process.exec
     (err, result) <~ exec "lsc -o #__dirname/www/js -c #__dirname/www/ls"
     throw err if err
-    console.log "Scripts build"
+    console.log "Scripts built"
     cb?!
 
 download-external-scripts = (cb) ->
