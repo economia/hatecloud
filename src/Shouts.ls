@@ -54,7 +54,7 @@ module.exports = class Shouts
         standardizedTerm = @standardizeTerm term
         (err, fullTerm) <~ @getFullTerm term
         if fullTerm then term := that
-        (err, termApproved) <~ @isApproved term
+        (err, termApproved) <~ @isApproved term, partyId
         return cb err if err
         switch termApproved
         | yes => @saveApproved term, partyId, 1, cb
@@ -88,8 +88,9 @@ module.exports = class Shouts
         return cb err if err
         cb null \pending
 
-    isApproved: (term, cb) ->
-        (err, result) <~ @redisClient.zscore @getStoreAll!, term
+    isApproved: (term, partyId, cb) ->
+        store = @getStoreParty partyId
+        (err, result) <~ @redisClient.zscore store, term
         return cb err if err
         switch result
         | null => cb null no
