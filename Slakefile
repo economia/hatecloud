@@ -16,7 +16,7 @@ externalStyles =
     \http://service.ihned.cz/js/jq-ui/theme/theme.min.css
 
 deferScripts = [ 'base.js' ]
-gzippable = <[admin.html index.html screen.css script.js]>
+gzippable = <[admin.html index.html screen.css script.js external.js]>
 build-styles = (options = {}) ->
     require! async
     (err, [external, local]) <~ async.parallel do
@@ -56,15 +56,11 @@ download-external-scripts = (cb) ->
     console.log "Dowloading scripts..."
     require! request
     require! async
-    normalizedNames =  externalScripts.map getSafeFilename
-    (err) <~ fs.mkdir "#__dirname/www/js_external"
     (err, responses) <~ async.map externalScripts, request~get
-    tasks = responses.map (response, index) ->
-        filename = normalizedNames[index]
-        (cb) -> fs.writeFile "#__dirname/www/js_external/#filename" response.body
-    async.parallel tasks
+    bodies = responses.map (.body)
+    <~ fs.writeFile "#__dirname/www/external.js" bodies.join "\n;\n"
     console.log "Scripts loaded"
-    cb!
+    cb?!
 
 download-external-styles = (cb) ->
     console.log "Downloading styles"
@@ -76,18 +72,9 @@ download-external-styles = (cb) ->
     console.log "Styles loaded"
     cb!
 
-getSafeFilename = (name) ->
-    name
-        .replace /^(.*?):\/\// ''
-        .replace /[^-\.a-z0-9]/ig '-'
-        .replace /[-]{2,}/ '-'
-
 combine-scripts = (options = {}, cb) ->
     console.log "Combining scripts..."
     require! uglify: "uglify-js"
-    externalFiles = externalScripts.map ->
-        name = getSafeFilename it
-        "#__dirname/www/js_external/#name"
     (err, files) <~ fs.readdir "#__dirname/www/js"
     files .= filter -> it isnt 'script.js' and it isnt 'script.js.map'
     files .= sort (a, b) ->
@@ -102,9 +89,7 @@ combine-scripts = (options = {}, cb) ->
             ..mangle       = no
             ..outSourceMap = "../js/script.js.map"
             ..sourceRoot   = "../../"
-    result = uglify.minify do
-        externalFiles ++ files
-        minifyOptions
+    result = uglify.minify files, minifyOptions
 
     {map, code} = result
     if not options.compression
@@ -155,16 +140,16 @@ gzip-file = (file, cb) ->
     cb!
 
 task \build ->
+    download-external-scripts!
     <~ download-external-styles
     build-styles compression: no
     <~ build-all-scripts
-    <~ download-external-scripts
     combine-scripts compression: no
 task \deploy ->
+    download-external-scripts!
     <~ download-external-styles
     build-styles compression: yes
     <~ build-all-scripts
-    <~ download-external-scripts
     <~ combine-scripts compression: yes
     <~ gzip-files!
 task \build-styles ->
