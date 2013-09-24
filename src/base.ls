@@ -41,6 +41,8 @@ regenerate = ->
     (err) <~ exec "node #__dirname/generator.js"
     console.error err if err
     outputCache.refresh!
+    if config.wordCloud.interval
+        setTimeout regenerate, that
 
 handleImageRequest = (req, res) ->
     | outputCache.currentImageLength
@@ -56,5 +58,3 @@ handleImageRequest = (req, res) ->
 
 outputCache.refresh!
 regenerate!
-if config.wordCloud.interval
-    setInterval regenerate, that
