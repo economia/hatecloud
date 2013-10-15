@@ -111,8 +111,8 @@ window.Control = class Control
         $ "<div></div>"
             ..addClass 'button help'
             ..html "<span>?</span><em>nápověda</em>"
-            ..attr \data-tooltip escape "<p>Dokážete si v současné situaci vybrat jednu z kandidujících stran, aniž byste si museli říct, že volíte „nejmenší zlo“? Proč jsou pro vás volby problematické? Jaké jsou důvody, kvůli kterým váháte nebo už dokonce víte, že svůj hlas neodevzdáte? V aplikaci serveru IHNED.cz můžete u každé strany, která má reálnou šanci dostat se do sněmovny, vybrat tři důvody, kvůli nimž je pro vás nepřijatelná.</p>
-                <p>Klikněte na logo strany, objeví se vám nejčastěji zmiňované důvody ostatních lidí. Vyberte kliknutím nabízená slova ta, která nejvíce reprezentuje váš názor. Nebo zvolte možnost „přidat slovo (vlevo dole) a zadejte vlastní slova. Můžete navolit maximálně tři důvody a kombinovat slova v nabídce s vlastními výrazy. <em>(Redakce si vyhrazuje právo vyřadit nebo upravit nevhodné a vulgární výrazy)</em>.</p>"
+            ..attr \data-tooltip escape "<p>Dokážete si v současné situaci vybrat jednu z kandidujících stran, aniž byste si museli říct, že volíte „nejmenší zlo“? Jaké jsou důvody, kvůli kterým jste ochotni dát svoji důvěru jedné politické straně? V aplikaci serveru IHNED.cz můžete u každé strany, která má reálnou šanci dostat se do parlamentu, vybrat tři důvody, díky kterým má pro vás volba strany smysl.</p>
+                <p>Klikněte na logo strany, objeví se vám nejčastěji zmiňované důvody ostatních lidí. Vyberte z nabídky slov ta, která nejlépe reprezentují váš názor. Nebo zvolte možnost „přidat slovo“ a zadejte vlastní slova. Můžete navolit až 3 jednoslovné důvody nebo je kombinovat s těmi z nabídky. <em>(Redakce si vyhrazuje právo vyřadit nebo upravit nevhodné a vulgární výrazy)</em>.</p>"
             ..appendTo @$wordCloud
 
     drawAddTermButton: ->
