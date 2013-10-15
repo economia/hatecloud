@@ -46,7 +46,7 @@ fillInitialData = ->
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, 10 #Math.ceil Math.random! * 30_000
-fillInitialData!
+# fillInitialData!
 
 <~ wordCloudDataConnector.loadFirstData!
 console.log "Computed"
