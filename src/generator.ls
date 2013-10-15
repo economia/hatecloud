@@ -12,6 +12,7 @@ require! {
 }
 
 redisClient = redis.createClient config.redis.port, config.redis.address
+
 antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
 outputCache = new OutputCache
@@ -23,24 +24,33 @@ wordCloudDataConnector = new WordCloudDataConnector do
     config
 
 fillInitialData = ->
+    console.log "Flushing DB"
+    <~ redisClient.flushdb!
     console.log 'filling random data'
     words_party =
-        top  : <[Kalousek Kníže Spánek Gripeny Šlechta Přeběhlictví Arogance Škrty Elity Korupce ]>
-        ods  : <[Nagygate Kmotři Minulost Nedůvěra Zklamání Nejistota Korupce Podnikatelé  Němcová Daně]>
-        cssd : <[Nejednostnost Sobotka Levicovost Hašek Socialismus Populismus Plýtvání Daně Komunisté Nemodernost]>
-        kscm : <[Minulost Nomenklatura Totalita Komunismus Osmačtyřicátý Osmašedesátý Zastaralost Znárodnění Strach Nedůvěra]>
-        ano  : <[KSČ Podnikatel Babiš Peníze Populismus Berlusconizace Nedůvěryhodnost Účelovost Diktátor Program]>
-        spoz : <[Zeman Nejednotnost Šlouf Kancléř Účelovost Lukoil Papaláš Populismus Nečitelnost Pochybnost]>
-        kdu  : <[Otazníky Konzervatismus Křešťanství Nestálost Osobnosti Nejasnost Čunek Prodejnost Nevýraznost Nemodernost]>
-        sz   : <[Levicovost Nečitelnost Osobnosti Marnost Ekologie Program Nezkušenost Zklamání Energetika  Radikalismus]>
+        top      : <[konzervatismus Schwarzenberg pravice]>
+        ods      : <[pravice premiérka daně]>
+        cssd     : <[zaměstnanost zdravotnictví důchod]>
+        kscm     : <[jistoty protest levice]>
+        ano      : <[nezkorumpovanost Babiš protest naděje]>
+        spoz     : <[Zeman odborníci Hůlka]>
+        kdu      : <[tradice rodina hodnoty]>
+        sz       : <[ekologie zodpovědnost Liška]>
+        svobodni : <[EU Mach nezávislost]>
+        pirati   : <[internet otevřenost referenda]>
+        hlvzhuru : <[Bobošíková dekrety Klaus]>
+        zmena    : <[Fischerová rovnoprávnost pravda]>
+        usvit    : <[Okamura pořádek Bárta]>
+        lev      : <[Paroubek přiznání referendum]>
 
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, 10 #Math.ceil Math.random! * 30_000
-# fillInitialData!
+fillInitialData!
 
 <~ wordCloudDataConnector.loadFirstData!
 console.log "Computed"
+console.log outputCache.currentOutput.toString!
 (err) <~ redisClient.set "currentData" outputCache.currentOutput
 console.log "Saved"
 redisClient.quit!
