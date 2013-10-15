@@ -1,0 +1,61 @@
+getBg(index)
+    bgLeft = (index % 5) * -71px
+    bgTop = floor(index / 5) * -58px
+    .logo
+        background-position bgLeft bgTop
+    &.active .logo
+        background-position bgLeft bgTop - 874
+
+&.sel-top
+    getBg 3
+&.sel-ods
+    getBg 5
+&.sel-cssd
+    getBg 0
+&.sel-kscm
+    getBg 20
+&.sel-ano
+    getBg 19
+&.sel-spoz
+    getBg 14
+&.sel-kdu
+    getBg 10
+&.sel-sz
+    getBg 22
+&.sel-svobodni
+    getBg 1
+&.sel-pirati
+    getBg 2
+&.sel-hlvzhuru
+    getBg 4
+&.sel-rds
+    getBg 6
+&.sel-kan
+    getBg 7
+&.sel-zmena
+    getBg 8
+&.sel-sscr
+    getBg 9
+&.sel-pb
+    getBg 11
+&.sel-suveren
+    getBg 12
+&.sel-aneo
+    getBg 13
+&.sel-obc
+    getBg 15
+&.sel-usvit
+    getBg 16
+&.sel-dsss
+    getBg 17
+&.sel-lev
+    getBg 21
+&.sel-kc
+    getBg 23
+
+.logo
+    opacity 0.7
+&:hover
+&:active
+    .logo
+        opacity 1

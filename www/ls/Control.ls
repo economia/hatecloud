@@ -16,8 +16,7 @@ window.Control = class Control
             let party = _party
                 item = $ "<li></li>"
                     ..addClass "sel-#party"
-                    ..append "<img src='img/loga/#{party}-on.png' width='72' height='56' class='on' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
-                    ..append "<img src='img/loga/#{party}-off.png' width='72' height='56' class='off' alt='Logo #{@parties[party].name}' title='#{@parties[party].name}' />"
+                    ..append "<div class='logo'></div>"
                     ..append @parties[party].name
                     ..append "<div class='arrow'></div>"
                     ..appendTo @$selector

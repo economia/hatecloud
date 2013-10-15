@@ -4,6 +4,8 @@
     width 100%
     list-style-type none
     padding 0px
+    position relative
+    z-index 299
     li
         position relative
         float left
@@ -43,22 +45,21 @@
             background #aaa
             .arrow
                 border-top-color @background
+        .logo
+            width 71px
+            height 58px
+            margin-left 4px
+            margin-top 2px
+            background url('./img/loga_grid.png')
+        &
+            @import loga
+
         &:active
             background #999
             .arrow
                 border-top-color @background
-        img.on
-            display none
-        img.off
-            display block
-            opacity 0.7
-        img
-            margin-left 4px
-            margin-bottom 4px
-        &:hover
-        &:active
-            img.off
-                opacity 1
+
+
         &.active
             img.off
                 display none
