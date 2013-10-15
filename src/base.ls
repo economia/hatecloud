@@ -20,7 +20,7 @@ outputCache = new OutputCache redisClient
 ajaxHandler = new AjaxHandler shouts, outputCache
 fileServer = new StaticServer do
     *   "#__dirname/../www"
-    *   gzip: yes
+    *   gzip: config.useGzip
 
 server = http.createServer (req, res) ->
     url = req.url.split '/'
