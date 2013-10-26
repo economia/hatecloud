@@ -42,11 +42,11 @@ window.Form = class Form implements jQuery.eventEmitter
             ..on \click (evt) ~>
                 evt.preventDefault!
                 @hide!
-        @$inputs = for i in [1 to 3]
+        @$inputs = for i in [1]
             $pair = $ "<div></div>"
                 ..addClass \pair
             $ "<label for='reason-#i'></label>"
-                ..html "#i. důvod"
+                ..html ""
                 ..appendTo $pair
             $input = $ "<input type='text' id='reason-#i' />"
                 ..appendTo $pair
