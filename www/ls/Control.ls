@@ -70,7 +70,7 @@ window.Control = class Control
             @onTermClicked term
         | otherwise
             switch @voteWatch.didVote @curentPartyId
-            | yes => alertify.error "Pro tuto stranu jste již hlasoval"
+            | yes => alertify.error "Již jste hlasoval"
             | no  => if term then @form.addTerm term else @form.display!
 
     registerClickHandlers: ->

@@ -1,6 +1,6 @@
 window.WordCloud = class WordCloud
     (@$container) ->
-        @colors = <[1B9E77 D95F02 7570B3 E7298A 66A61E E6AB02]>
+        @colors = <[#1B9E77 #D95F02 #7570B3 #E7298A #66A61E #E6AB02]>
         @width = @$container.width!
         @height = @$container.height!
 
@@ -28,10 +28,11 @@ window.WordCloud = class WordCloud
     getSVG: (words) ->
         texts = for it in words
             color = @colors[Math.floor Math.random! * @colors.length]
+            console.log color
             """<text
                 font-size='#{it.size}px'
                 font-family='Impact'
-                style="fill:#{color}"
+                style="fill:#{color};"
                 text-anchor='middle'
                 transform='translate(#{it.x}, #{it.y}) rotate(#{it.rotate * 90})'
                 >#{it.text}</text>"""
@@ -45,10 +46,12 @@ window.WordCloud = class WordCloud
 
     getHTML: (words) ->
         texts = for it in words
+            color = @colors[Math.floor Math.random! * @colors.length]
             """<span style='font-size:#{it.size}px;
                 font-family:Impact;
                 position:absolute;
                 left: #{it.x}px;
+                color: #color;
                 top: #{it.y}px;'
                 class='#{it.className || ''} #{if it.rotate then 'rot' else ''} text'
                 data-party='#{it.className}'
