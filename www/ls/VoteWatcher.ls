@@ -1,7 +1,7 @@
 window.VoteWatcher = class VoteWatcher
     voted: null
     ->
-        if Cookies.get \votes
+        if Cookies.get \votes-coit
             @voted = JSON.parse that
         if !@voted?length then @voted = []
 
@@ -11,7 +11,7 @@ window.VoteWatcher = class VoteWatcher
     registerVote: (id) ->
         @voted.push id
         Cookies.set do
-            \votes
+            \votes-coit
             JSON.stringify @voted
             7
             '/'
