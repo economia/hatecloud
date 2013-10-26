@@ -28,20 +28,7 @@ fillInitialData = ->
     <~ redisClient.flushdb!
     console.log 'filling random data'
     words_party =
-        top      : <[konzervatismus Schwarzenberg pravice]>
-        ods      : <[pravice premiérka daně]>
-        cssd     : <[zaměstnanost zdravotnictví důchod]>
-        kscm     : <[jistoty protest levice]>
         ano      : <[ostuda vztek radost zklamání hnus znechucení hurá vítězství katastrofa naděje hrůza super]>
-        spoz     : <[Zeman odborníci Hůlka]>
-        kdu      : <[tradice rodina hodnoty]>
-        sz       : <[ekologie zodpovědnost Liška]>
-        svobodni : <[EU Mach nezávislost]>
-        pirati   : <[internet otevřenost referenda]>
-        hlvzhuru : <[Bobošíková dekrety Klaus]>
-        zmena    : <[Fischerová rovnoprávnost pravda]>
-        usvit    : <[Okamura pořádek Bárta]>
-        lev      : <[Paroubek přiznání referendum]>
 
     for party, words of words_party
         words.forEach (word) ->
