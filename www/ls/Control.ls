@@ -4,7 +4,7 @@ window.Control = class Control
         @wordCloud = @prepareWordCloud!
         @form = @prepareForm!
         @drawParty \ano
-        @drawAddTermButton!
+        #@drawAddTermButton!
         @registerClickHandlers!
 
     drawSelector: ->
@@ -59,19 +59,7 @@ window.Control = class Control
 
 
     onTermClicked: (term = null, element) ->
-        | @curentPartyId is \all
-            party = if Modernizr.svg
-                element.getAttribute 'class'
-            else
-                $ element .data \party
-            return if not @parties[party]
-            $ "li.sel-#party" .addClass \active
-            @drawParty party
-            @onTermClicked term
-        | otherwise
-            switch @voteWatch.didVote @curentPartyId
-            | yes => alertify.error "Již jste hlasoval"
-            | no  => if term then @form.addTerm term else @form.display!
+        alertify.error "Je nám líto, ale anketa je již uzavřena."
 
     registerClickHandlers: ->
         $ document .on 'click touchstart' '.wordCloud .subcontainer text' (evt) ~>
