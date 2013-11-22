@@ -1,55 +1,11 @@
 parties =
-    top:
-        name: "TOP 09"
-    ods:
-        name: \ODS
-    cssd:
-        name: \ČSSD
-    kscm:
-        name: \KSČM
-    ano:
-        name: \ANO
-    spoz:
-        name: \SPOZ
-    kdu:
-        name: \KDU-ČSL
-    sz:
-        name: \SZ
-    svobodni:
-        name: \Svobodní
-    pirati:
-        name: \Piráti
-    hlvzhuru:
-        name: "HL. VZHŮRU"
-    rds:
-        name: "RDS"
-    kan:
-        name: "KAN"
-    zmena:
-        name: "Změna"
-    sscr:
-        name: "SsČR"
-    pb:
-        name: "PB"
-    suveren:
-        name: "Suveren."
-    aneo:
-        name: "ANEO"
-    obc:
-        name: "OBČ 2011"
-    usvit:
-        name: "Úsvit"
-    dsss:
-        name: "DSSS"
-    lev:
-        name: "LEV 21"
-    kc:
-        name: "KČ"
-
-
+    "2013":
+        name: "2013"
+    "2014":
+        name: "2014"
 
 new Tooltip!watchElements!
-(data) <~ $.getJSON "./term.json"
+(data) <~ $.getJSON "./term"
 wordList = new WordList data
 control = new Control do
     data

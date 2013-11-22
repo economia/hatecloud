@@ -62,7 +62,8 @@ body
             top 30px
             span:hover
             text:hover
-                cursor default
+                cursor pointer
+                opacity 0.8
             span:active
             text:active
                 opacity 0.9
@@ -91,6 +92,22 @@ body
                     opacity 1
                 .button.add
                     display none
+            .positive
+            &.positive .text
+            &.positive text
+                color #a7f700
+                fill #a7f700
+            .negative
+            &.negative .text
+            &.negative text
+                color #ff7600
+                fill #ff7600
+            .neutral
+            &.neutral .text
+            &.neutral text
+                color #ffd300
+                fill #ffd300
+
 
         .form
             @import form
