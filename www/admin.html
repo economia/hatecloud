@@ -14,9 +14,6 @@
         <script src="http://service.ihned.cz/js/bootstrap/v2.3.2/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <style>
-            .btn-success {
-                margin-right: 20px;
-            }
             .hidden {
                 display: none;
             }
@@ -52,6 +49,7 @@
                             <th>Slovo</th>
                             <th>Strana</th>
                             <th>Počet bodů</th>
+                            <th>Nálada</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -77,6 +75,7 @@
                 shouts.forEach(function(shout) {
                     var $row = $("<tr></tr>")
                         .data('term', shout.term)
+                        .data('party', shout.party)
                         .appendTo($table);
                     var $term = $("<td></td>")
                         .html(shout.term)
@@ -87,16 +86,29 @@
                     var $score = $("<td></td>")
                         .append(shout.score)
                         .appendTo($row);
+                    var $mood = $("<td class='btn-group'></td>")
+                        .append("<button class='btn btn-setMood "+ (shout.mood === "positive" ? "btn-success" : "") + " ' data-mood='positive'>Pozitivní</button>")
+                        .append("<button class='btn btn-setMood "+ (shout.mood === "neutral" ? "btn-success" : "") + " ' data-mood='neutral'>Neutrální</button>")
+                        .append("<button class='btn btn-setMood "+ (shout.mood === "negative" ? "btn-success" : "") + " ' data-mood='negative'>Negativní</button>")
+                        .appendTo($row);
                 })
             })
             socket.on('newUnapproved', function(shout) {
                 var $table = $("#unapproved table");
                 addShoutToTable(shout, $table);
             })
-            $(document).on('click', '.btn.btn-success', function() {
+            $(document).on('click', '.btn.btn-approveAndMood', function() {
                 var $ele = $(this);
                 var termData = getTermData($ele);
                 socket.emit('approveTerm', termData);
+                termData["mood"] = $ele.data('mood');
+                socket.emit('setMood', termData);
+            })
+            $(document).on('click', '.btn.btn-setMood', function() {
+                var $ele = $(this);
+                var termData = getTermData($ele);
+                termData["mood"] = $ele.data('mood');
+                socket.emit('setMood', termData);
             })
             $(document).on('click', '.btn.btn-danger', function() {
                 var $ele = $(this);
@@ -126,7 +138,9 @@
                     .html(shout.partyId)
                     .appendTo($row);
                 var $actions = $("<td></td>")
-                    .append("<button class='btn btn-success'>Schválit</button>")
+                    .append("<button class='btn btn-approveAndMood' data-mood='positive'>Pozitivní</button>")
+                    .append("<button class='btn btn-approveAndMood' data-mood='neutral'>Neutrální</button>")
+                    .append("<button class='btn btn-approveAndMood' data-mood='negative'>Negativní</button>")
                     .append("<button class='btn btn-danger'>Zamítnout</button>")
                     .appendTo($row);
             }
