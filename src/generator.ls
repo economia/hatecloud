@@ -16,7 +16,7 @@ redisClient = redis.createClient config.redis.port, config.redis.address
 antispam = new Antispam redisClient, config.antispam
 shouts = new Shouts redisClient, antispam, config.shouts.parties
 outputCache = new OutputCache
-wordCloud = new WordCloud!
+wordCloud = new WordCloud shouts
 wordCloudDataConnector = new WordCloudDataConnector do
     shouts
     wordCloud
@@ -28,12 +28,15 @@ fillInitialData = ->
     <~ redisClient.flushdb!
     console.log 'filling random data'
     words_party =
-        ano      : <[ostuda vztek radost zklamání hnus znechucení hurá vítězství katastrofa naděje hrůza super]>
+        "2013"      : <[radost super nadhera]>
+        "2014"      : <[ponurost jejda hruza]>
 
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, 10 #Math.ceil Math.random! * 30_000
-# fillInitialData!
+    shouts.setMood \radost \2013 \positive
+    shouts.setMood \hruza \2014 \negative
+#fillInitialData!
 
 <~ wordCloudDataConnector.loadFirstData!
 console.log "Computed"
