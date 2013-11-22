@@ -10,7 +10,7 @@ module.exports = class AdminHandler
 
     sendUnapproved: (socket) ->
         (err, content) <~ @shouts.getUnapproved
-        socket.emit \unapproved content
+        @sockets.emit \unapproved content
 
     sendAll: (socket) ->
         (err, content) <~ @shouts.getAllByParty
