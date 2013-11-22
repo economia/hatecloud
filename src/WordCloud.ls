@@ -1,10 +1,11 @@
 require! {
     Cloud: 'd3.layout.cloud'.cloud
     Canvas: "canvas"
+    async
 }
 
 module.exports = class WordCloud
-    ->
+    (@shouts) ->
     generate: (words, {width, height}:options, cb) ->
         cloud = Cloud!
             ..size [width, height]
@@ -23,12 +24,14 @@ module.exports = class WordCloud
             ..start!
 
     draw: (words, {width, height}:options, cb) ->
-        output = words.map ->
+        (err, output) <~ async.map words, (it, cb) ~>
             output = {}
             output{size, x, y, text} = it
-            if it.style.className then output.className = it.style.className
+            party = it.style.className
+            (err, mood) <~ @shouts.getMood output.text, party
+            output.className = mood || "neutral"
             output.rotate = it.rotate == 90
-            output
+            cb null output
         cb null output
 
     generatePNGBuffer: (words, {width, height, colors}:options, cb) ->

@@ -6,7 +6,19 @@ require! {
 }
 test = it
 describe 'WordCloud' ->
-    wordCloud = new WordCloud
+    shoutsMock =
+        store:
+            "Kalousek;top" : "negative"
+            "Nagygate;ods" : "positive"
+        getMood: (term, partyId, cb) ->
+            <~ process.nextTick
+            key = "#{term};#{partyId}"
+            if @store[key]
+                cb null that
+            else
+                cb null null
+
+    wordCloud = new WordCloud shoutsMock
     words_party =
         top  : <[Kalousek Kníže Spánek Gripeny Šlechta Přeběhlictví Arogance Škrty Elity Korupce ]>
         ods  : <[ Nagygate Kmotři Minulost Nedůvěra Zklamání Nejistota Korupce Podnikatelé  Němcová Daně]>
