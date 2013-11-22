@@ -4,6 +4,7 @@ require! {
 }
 module.exports = class Shouts extends EventEmitter
     getStoreAll: -> "shouts:_all"
+    getStoreMoods: -> "shouts:_moods"
     getStoreParty: -> "shouts:#it"
     getStorePending: -> "shouts:_pending"
     pendingDelimiter: ";"
@@ -126,6 +127,19 @@ module.exports = class Shouts extends EventEmitter
                 ~> @redisClient.zrem @getStorePending!, record, it
         return cb err if err
         cb null 1
+
+    setMood: (term, partyId, mood, cb) ->
+        store = @getStoreMoods!
+        key = "#{term}#{@pendingDelimiter}#{partyId}"
+        (err) <~ @redisClient.hset store, key, mood
+        cb? err
+
+    getMood: (term, partyId, cb) ->
+        store = @getStoreMoods!
+        key = "#{term}#{@pendingDelimiter}#{partyId}"
+        (err, mood) <~ @redisClient.hget store, key
+        cb err, mood
+
 
     ban: (term, partyId, cb) ->
         record = @getRecordString term, partyId

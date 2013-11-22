@@ -136,6 +136,34 @@ describe 'Shouts' ->
                 expect unapproved .to.have.length 0
                 done!
 
+    describe "Setting moods" ->
+        test "should set mood for a party-word" (done) ->
+            (err) <~ shouts.setMood \termB \ods \positive
+            expect err .to.be null
+            (err) <~ shouts.setMood \termA \ods \positive
+            expect err .to.be null
+            (err) <~ shouts.setMood \termA \ods \negative
+            expect err .to.be null
+            (err) <~ shouts.setMood \termD \cssd \negative
+            expect err .to.be null
+            done!
+
+        test "should retrieve moods" (done) ->
+            (err, mood) <~ shouts.getMood \termB \ods
+            expect mood .to.equal \positive
+            (err, mood) <~ shouts.getMood \termD \cssd
+            expect mood .to.equal \negative
+            done!
+
+        test "should return null on unassigned mood-terms" (done) ->
+            (err, mood) <~ shouts.getMood \termB \cssd
+            expect mood .to.equal null
+            done!
+
+        test "should properly handle overwriting" (done) ->
+            (err, mood) <~ shouts.getMood \termA \ods
+            expect mood .to.equal \negative
+            done!
 
     describe 'Antispam' ->
         test 'Shout should be querying Antispam for permission to vote' ->
