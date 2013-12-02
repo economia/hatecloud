@@ -29,6 +29,7 @@ window.Control = class Control
                         @$selector.find '.active' .removeClass \active
                         item.addClass \active
                         @drawParty party
+                item.addClass \active if party == \2013
 
         @$selector.appendTo @$container
 
