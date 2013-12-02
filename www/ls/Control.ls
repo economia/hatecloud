@@ -113,4 +113,3 @@ window.Control = class Control
             ..html "<span>+</span><em>přidat slovo</em>"
             ..appendTo @$wordCloud
             ..on \click ~> @onTermClicked!
-
