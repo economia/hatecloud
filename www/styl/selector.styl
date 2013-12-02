@@ -3,7 +3,6 @@
     float left
     width 100%
     height 94px
-    overflow hidden
     list-style-type none
     padding 0px
     position relative
@@ -22,17 +21,24 @@
     li
         position relative
         float left
-        padding 0px
-        padding-bottom 8px
-        width (650 / 8 - 1)px
+        padding 14px 0px 0px 0px
+        width (650 / 2 - 1)px
+        box-sizing border-box
+        height 99px
         text-align center
-        font-size 0.72em
+        font-size 1.25em
         font-weight bold
         background #ccc
         border-left 1px solid white
         border-bottom 1px solid #f0f0f0
-        color #777
+        color #000
         transition top 0.6s, margin-top 0.6s
+        line-height 1.9em
+        text-transform uppercase
+        b
+            font-weight bold
+            font-size 2.65em
+            display block
         .arrow
             display block
             position absolute
@@ -42,7 +48,7 @@
             width 0px
             height 0px
             border-style solid
-            border-width 10px 10px 0 10px
+            border-width 15px 15px 0 15px
             border-color #ccc transparent transparent transparent
 
         &:first-child
@@ -52,7 +58,7 @@
             background #a6a6a6
             border-bottom-color #d2d2d2
             .arrow
-                bottom -10px
+                bottom -15px
                 border-top-color @background
         &:hover
             color black
@@ -60,14 +66,7 @@
             background #aaa
             .arrow
                 border-top-color @background
-        .logo
-            width 71px
-            height 58px
-            margin-left 4px
-            margin-top 2px
-            background url('./img/loga_grid.png')
-        &
-            @import loga
+
         &.sel-more
             position absolute
             top 0px
@@ -81,11 +80,3 @@
             background #999
             .arrow
                 border-top-color @background
-
-
-        &.active
-            img.off
-                display none
-            img.on
-                display block
-

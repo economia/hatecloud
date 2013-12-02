@@ -11,6 +11,25 @@ window.Control = class Control
         @$selector = $ "<ul></ul>"
             ..addClass \selector
         _index = 0
+        for _party of @data
+            continue if _party is \all
+            let party = _party
+                index = _index++
+                item = $ "<li></li>"
+                    ..addClass "sel-#party"
+                    ..append @parties[party].name
+                    ..append "<div class='arrow'></div>"
+                    ..appendTo @$selector
+                    ..on \click ~>
+                        if index >= 7
+                            @$selector.addClass "secondHalf"
+                        else
+                            @$selector.removeClass "secondHalf"
+                        @$selector.removeClass \expanded
+                        @$selector.find '.active' .removeClass \active
+                        item.addClass \active
+                        @drawParty party
+
         @$selector.appendTo @$container
 
     drawParty: (partyId) ->
