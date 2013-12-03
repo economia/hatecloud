@@ -45,8 +45,10 @@ build-script = (file, cb) ->
     cb?!
 
 build-all-scripts = (cb) ->
-    console.log "Building scripts..."
     require! child_process.exec
+    console.log "Building backend scripts..."
+    (err, stdout, stderr) <~ exec "lsc -o #__dirname/lib -c #__dirname/src"
+    console.log "Building frontend scripts..."
     (err, result) <~ exec "lsc -o #__dirname/www/js -c #__dirname/www/ls"
     throw err if err
     console.log "Scripts built"
