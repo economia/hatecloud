@@ -28,14 +28,37 @@ fillInitialData = ->
     <~ redisClient.flushdb!
     console.log 'filling random data'
     words_party =
-        "2013"      : <[radost super nadhera]>
-        "2014"      : <[ponurost jejda hruza]>
+        "2013" :
+            "Babiš"
+            "popelníček"
+            "Zeman"
+            "intervence"
+            "bitcoin"
+            "Kostelecké uzeniny"
+            "nová totalita"
+            "electroswing"
+            "nagygate"
+            "sešup"
+            "průšvih"
+            "konec iluzí"
+            "Plzeň"
+            "amnestie"
+            "volby"
+        "2014" :
+            "olympiáda"
+            "whiskey"
+            "paywall"
+            "růst"
+            "konec iluzí"
+            "Sparta"
+            "Ostrava"
+            "naděje"
+            "risk"
+            "návrat krize"
 
     for party, words of words_party
         words.forEach (word) ->
             shouts.saveApproved word, party, 10 #Math.ceil Math.random! * 30_000
-    shouts.setMood \radost \2013 \positive
-    shouts.setMood \hruza \2014 \negative
 #fillInitialData!
 
 <~ wordCloudDataConnector.loadFirstData!
