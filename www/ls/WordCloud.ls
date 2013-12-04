@@ -28,7 +28,6 @@ window.WordCloud = class WordCloud
     getSVG: (words) ->
         texts = for it in words
             color = @colors[Math.floor Math.random! * @colors.length]
-            console.log color
             """<text
                 font-size='#{it.size}px'
                 font-family='Impact'
