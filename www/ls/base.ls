@@ -5,7 +5,7 @@ parties =
         name: "<b>2014</b> jedním slovem"
 
 new Tooltip!watchElements!
-(data) <~ $.getJSON "./term"
+(data) <~ $.getJSON "./term.json"
 wordList = new WordList data
 control = new Control do
     data

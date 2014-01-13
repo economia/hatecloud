@@ -32,7 +32,7 @@ server = http.createServer (req, res) ->
     | otherwise
         req.on \end -> fileServer.serve req, res
         req.resume!
-server.listen 80
+server.listen 8080
 sockets = io.listen server
     ..set 'log level' 2
 adminHandler = new AdminHandler sockets, shouts, config.admin

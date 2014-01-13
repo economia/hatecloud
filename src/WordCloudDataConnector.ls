@@ -85,4 +85,4 @@ module.exports = class WordCloudDataConnector
 
 
     computeSize: (sizes, maxScore, score) ->
-        sizes.minSize + sizes.maxSize * score / maxScore
+        sizes.minSize + sizes.maxSize * Math.sqrt score / maxScore
