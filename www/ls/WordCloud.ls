@@ -1,6 +1,5 @@
 window.WordCloud = class WordCloud
     (@$container) ->
-        @colors = <[#1B9E77 #D95F02 #7570B3 #E7298A #66A61E #E6AB02]>
         @width = @$container.width!
         @height = @$container.height!
 
@@ -27,7 +26,7 @@ window.WordCloud = class WordCloud
 
     getSVG: (words) ->
         texts = for it in words
-            color = @colors[Math.floor Math.random! * @colors.length]
+            color = \#005091
             """<text
                 font-size='#{it.size}px'
                 font-family='Impact'
