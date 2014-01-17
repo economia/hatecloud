@@ -1,8 +1,6 @@
 parties =
-    "2013":
-        name: "<b>2013</b> jedním slovem"
-    "2014":
-        name: "<b>2014</b> jedním slovem"
+    "ods":
+        name: "ODS"
 
 new Tooltip!watchElements!
 (data) <~ $.getJSON "./term"

@@ -3,7 +3,7 @@ window.Control = class Control
         @drawSelector!
         @wordCloud = @prepareWordCloud!
         @form = @prepareForm!
-        @drawParty \2013
+        @drawParty \ods
         @drawAddTermButton!
         @registerClickHandlers!
 

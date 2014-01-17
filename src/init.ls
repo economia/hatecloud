@@ -28,33 +28,23 @@ fillInitialData = ->
     <~ redisClient.flushdb!
     console.log 'filling random data'
     words_party =
-        "2013" :
-            "Babiš"
-            "popelníček"
-            "Zeman"
-            "intervence"
-            "bitcoin"
-            "Kostelecké uzeniny"
-            "nová totalita"
-            "electroswing"
-            "nagygate"
-            "sešup"
-            "průšvih"
-            "konec iluzí"
-            "Plzeň"
-            "amnestie"
-            "volby"
-        "2014" :
-            "olympiáda"
-            "whiskey"
-            "paywall"
-            "růst"
-            "konec iluzí"
-            "Sparta"
-            "Ostrava"
-            "naděje"
-            "risk"
-            "návrat krize"
+        "ods" :
+            \Klaus
+            \Topolánek
+            \Nečas
+            \Janoušek
+            \Rittig
+            \Němcová
+            \Hrdlička
+            \Kuba
+            \Kubera
+            \Nagyová
+            \Dlouhý
+            \Bém
+            \Svoboda
+            \Oulický
+            \Jurečko
+
 
     for party, words of words_party
         words.forEach (word) ->

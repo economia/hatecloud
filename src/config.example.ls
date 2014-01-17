@@ -1,16 +1,17 @@
 module.exports =
+    useGzip: no
     redis:
-        address: '192.168.123.16'
+        address: '127.0.0.1'
         port: 6379
     shouts:
-        parties: <[top ods cssd kscm ano spoz kdu sz]>
+        parties: <[ods]>
     antispam:
         timeout: 600_seconds
     admin:
         allowedIps: <[127.0.0.1 194.228.51.218 95.82.135.42]>
     wordCloud:
         width: 650_px
-        height: 650_px
+        height: 580_px
         maxSize: 90_px
         minSize: 5_px
         interval: 10_000_ms
@@ -20,11 +21,6 @@ module.exports =
             maxSize: 45_px
             minSize: 5_px
             colors:
-                kscm : \#e3001a
-                cssd : \#f29400
-                ods  : \#006ab3
-                top  : \#7c0042
-                spoz : \#FB9A99
-                sz   : \#00AD00
-                kdu  : \#FFE03E
-                ano  : \#282560
+                positive : \#a7f700
+                negative : \#ff7600
+                neutral  : \#ffd300
