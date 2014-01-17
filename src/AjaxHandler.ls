@@ -51,5 +51,5 @@ module.exports = class AjaxHandler
         terms = data.["terms[]"]
         party = data.party
         return null unless typeof! party == \String
-        return null unless typeof! terms == \Array
-        {terms, party}
+        return null unless typeof! terms == \String
+        terms = [terms]
