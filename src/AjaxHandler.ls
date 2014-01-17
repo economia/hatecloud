@@ -53,3 +53,4 @@ module.exports = class AjaxHandler
         return null unless typeof! party == \String
         return null unless typeof! terms == \String
         terms = [terms]
+        {terms, party}
