@@ -64,13 +64,13 @@ window.Control = class Control
         party = @curentPartyId
         switch @voteWatch.didVote party
         | yes
-            alertify.error "Již jste již hlasoval"
+            alertify.error "Již jste hlasoval"
         | no
             out = {terms, party: @curentPartyId}
             request = $.post "./term" out
             request.fail ->
                 switch it.status
-                | 403 => alertify.error "Již jste již hlasoval"
+                | 403 => alertify.error "Již jste hlasoval"
                 | 404 => alertify.error "Zadali jste neexistující stranu. To by nešlo."
                 | _   => alertify.error "Omlouváme se, ale v aplikaci nastala chyba. Zkuste to prosím později."
             request.done ~>
